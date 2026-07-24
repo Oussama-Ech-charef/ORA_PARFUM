@@ -2,16 +2,8 @@
 
 import { Cart, CartItem, Product } from '@/types';
 import { formatPrice } from '@/lib/format';
-import { DEFAULT_PACKAGING_ID, getPackagingLabel } from '@/data/packaging';
 
 const CART_KEY = 'ora_cart';
-
-function ensurePackaging(items: CartItem[]): CartItem[] {
-  return items.map((item) => ({
-    ...item,
-    packagingOption: item.packagingOption || DEFAULT_PACKAGING_ID,
-  }));
-}
 
 export function getCart(): Cart {
   if (typeof window === 'undefined') {
@@ -20,9 +12,7 @@ export function getCart(): Cart {
   try {
     const data = localStorage.getItem(CART_KEY);
     if (data) {
-      const parsed = JSON.parse(data);
-      parsed.items = ensurePackaging(parsed.items);
-      return parsed;
+      return JSON.parse(data);
     }
   } catch {
     // ignore
@@ -43,7 +33,7 @@ export function addToCart(product: Product, quantity: number): Cart {
   if (existingIndex >= 0) {
     cart.items[existingIndex].quantity += quantity;
   } else {
-    cart.items.push({ product, quantity, packagingOption: DEFAULT_PACKAGING_ID });
+    cart.items.push({ product, quantity });
   }
 
   return recalculateCart(cart);
@@ -65,16 +55,6 @@ export function updateQuantity(productId: string, quantity: number): Cart {
     item.quantity = quantity;
   }
   return recalculateCart(cart);
-}
-
-export function updatePackaging(productId: string, packagingOption: string): Cart {
-  const cart = getCart();
-  const item = cart.items.find((item) => item.product.id === productId);
-  if (item) {
-    item.packagingOption = packagingOption;
-  }
-  saveCart(cart);
-  return cart;
 }
 
 export function clearCart(): Cart {
@@ -108,7 +88,25 @@ export function getCartCount(): number {
   return cart.items.reduce((sum, item) => sum + item.quantity, 0);
 }
 
-export function generateOrderMessage(cart: Cart, orderId: string, whatsappNumber: string): string {
+export function computeItemsTotals(items: CartItem[]): { subtotal: number; discount: number; total: number } {
+  const subtotal = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const discount = items.reduce(
+    (sum, item) =>
+      sum +
+      (item.product.discount
+        ? (item.product.price * item.product.discount * item.quantity) / 100
+        : 0),
+    0
+  );
+  return { subtotal, discount, total: subtotal - discount };
+}
+
+export function generateOrderMessageForItems(
+  items: CartItem[],
+  orderId: string,
+  whatsappNumber: string,
+): string {
+  const { subtotal, discount, total } = computeItemsTotals(items);
   const lines: string[] = [];
   lines.push('السلام عليكم،');
   lines.push('أرغب في طلب المنتجات التالية من ORA PARFUM:');
@@ -118,16 +116,14 @@ export function generateOrderMessage(cart: Cart, orderId: string, whatsappNumber
   lines.push('المنتجات:');
   lines.push('');
 
-  cart.items.forEach((item, index) => {
+  items.forEach((item, index) => {
     const discountedPrice = item.product.discount
       ? item.product.price - (item.product.price * item.product.discount) / 100
       : item.product.price;
     const lineTotal = discountedPrice * item.quantity;
-    const packagingLabel = getPackagingLabel(item.packagingOption);
 
     lines.push(`${index + 1}. ${item.product.name}`);
     lines.push(`   الكمية: ${item.quantity}`);
-    lines.push(`   التغليف: ${packagingLabel}`);
     lines.push(`   السعر: ${formatPrice(discountedPrice)}`);
     lines.push(`   المجموع: ${formatPrice(lineTotal)}`);
     lines.push('');
@@ -135,11 +131,7 @@ export function generateOrderMessage(cart: Cart, orderId: string, whatsappNumber
 
   lines.push('--------------------');
   lines.push('');
-  lines.push(`المجموع الفرعي: ${formatPrice(cart.subtotal)}`);
-  if (cart.discount > 0) {
-    lines.push(`الخصم: ${formatPrice(cart.discount)}`);
-  }
-  lines.push(`المجموع النهائي: ${formatPrice(cart.total)}`);
+  lines.push(`المجموع النهائي: ${formatPrice(total)}`);
   lines.push('');
   lines.push('شكراً لكم.');
 

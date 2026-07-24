@@ -18,7 +18,6 @@ export interface Product {
 export interface CartItem {
   product: Product;
   quantity: number;
-  packagingOption: string;
 }
 
 export interface Cart {

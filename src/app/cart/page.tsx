@@ -9,19 +9,42 @@ import { FaWhatsapp } from 'react-icons/fa';
 import { generateOrderId, addOrder } from '@/lib/orders';
 import { formatPrice } from '@/lib/format';
 import { SITE_CONFIG } from '@/lib/config';
-import { PACKAGING_OPTIONS } from '@/data/packaging';
+import { generateOrderMessageForItems, computeItemsTotals } from '@/lib/cart';
 
 export default function CartPage() {
-  const { cart, itemCount, updateQuantity, removeFromCart, updatePackaging, clearCart, getWhatsAppUrl } = useCart();
+  const { cart, itemCount, updateQuantity, removeFromCart, clearCart } = useCart();
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [validationError, setValidationError] = useState('');
+  const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set(cart.items.map((item) => item.product.id)));
+
+  const toggleItem = (productId: string) => {
+    setSelectedItems((prev) => {
+      const next = new Set(prev);
+      if (next.has(productId)) {
+        next.delete(productId);
+      } else {
+        next.add(productId);
+      }
+      return next;
+    });
+  };
+
+  const allSelected = cart.items.length > 0 && cart.items.every((item) => selectedItems.has(item.product.id));
+
+  const toggleAll = () => {
+    if (allSelected) {
+      setSelectedItems(new Set());
+    } else {
+      setSelectedItems(new Set(cart.items.map((item) => item.product.id)));
+    }
+  };
+
+  const filteredItems = cart.items.filter((item) => selectedItems.has(item.product.id));
+  const selectedTotals = computeItemsTotals(filteredItems);
 
   const handleWhatsAppCheckout = () => {
-    const missingPackaging = cart.items.find(
-      (item) => !item.packagingOption
-    );
-    if (missingPackaging) {
-      setValidationError('يرجى اختيار نوع التغليف لكل منتج قبل إتمام الطلب.');
+    if (filteredItems.length === 0) {
+      setValidationError('يرجى اختيار منتج واحد على الأقل لإتمام الطلب.');
       setTimeout(() => setValidationError(''), 4000);
       return;
     }
@@ -30,14 +53,14 @@ export default function CartPage() {
     const orderId = generateOrderId();
     addOrder({
       id: orderId,
-      items: [...cart.items],
-      subtotal: cart.subtotal,
-      discount: cart.discount,
-      total: cart.total,
+      items: [...filteredItems],
+      subtotal: selectedTotals.subtotal,
+      discount: selectedTotals.discount,
+      total: selectedTotals.total,
       status: 'جديد',
       createdAt: new Date().toISOString(),
     });
-    const url = getWhatsAppUrl(orderId, SITE_CONFIG.whatsappNumber);
+    const url = generateOrderMessageForItems(filteredItems, orderId, SITE_CONFIG.whatsappNumber);
     window.open(url, '_blank');
     setOrderPlaced(true);
     setTimeout(() => setOrderPlaced(false), 3000);
@@ -79,6 +102,16 @@ export default function CartPage() {
         <div className="ora-container">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-4">
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={toggleAll}
+                  className="text-sm text-warm-gray hover:text-rich-black transition-colors"
+                >
+                  {allSelected ? 'إلغاء تحديد الكل' : 'تحديد الكل'}
+                </button>
+                <span className="text-sm text-warm-gray">{filteredItems.length} من {cart.items.length} منتج محدد</span>
+              </div>
+
               {cart.items.map((item) => {
                 const discountPrice = item.product.discount
                   ? item.product.price - (item.product.price * item.product.discount) / 100
@@ -86,12 +119,32 @@ export default function CartPage() {
                 const itemTotal = discountPrice
                   ? discountPrice * item.quantity
                   : item.product.price * item.quantity;
+                const isSelected = selectedItems.has(item.product.id);
 
                 return (
                   <div
                     key={item.product.id}
-                    className="bg-white border border-cream rounded-xl p-4 flex gap-4 hover:border-gold-light transition-all duration-300"
+                    className={`bg-white border rounded-xl p-4 flex gap-4 transition-all duration-300 cursor-pointer ${
+                      isSelected
+                        ? 'border-gold/30 ring-1 ring-gold/20'
+                        : 'border-cream hover:border-gold-light'
+                    }`}
+                    onClick={() => toggleItem(item.product.id)}
                   >
+                    <div className="flex items-center">
+                      <div
+                        className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all duration-200 ${
+                          isSelected ? 'border-gold bg-gold' : 'border-warm-gray bg-white'
+                        }`}
+                      >
+                        {isSelected && (
+                          <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+
                     <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-lg bg-ivory-dark overflow-hidden flex-shrink-0">
                       <Image
                         src={item.product.image}
@@ -110,38 +163,24 @@ export default function CartPage() {
                           <p className="text-xs text-warm-gray">{item.product.volume} | {item.product.gender}</p>
                         </div>
                         <button
-                          onClick={() => removeFromCart(item.product.id)}
+                          onClick={(e) => { e.stopPropagation(); removeFromCart(item.product.id); }}
                           className="p-2 text-warm-gray hover:text-red-500 transition-colors"
                         >
                           <FiTrash2 className="w-4 h-4" />
                         </button>
                       </div>
 
-                      <div className="mt-3 flex items-center gap-2">
-                        <span className="text-sm text-warm-gray whitespace-nowrap">التغليف:</span>
-                        <select
-                          value={item.packagingOption}
-                          onChange={(e) => updatePackaging(item.product.id, e.target.value)}
-                          className="text-sm bg-white border border-light-gray rounded-lg px-3 py-1.5 flex-1 min-w-0 focus:outline-none focus:ring-1 focus:ring-gold/40"
-                          style={{ fontFamily: "'Cairo', sans-serif" }}
-                        >
-                          {PACKAGING_OPTIONS.map((opt) => (
-                            <option key={opt.id} value={opt.id}>{opt.label}</option>
-                          ))}
-                        </select>
-                      </div>
-
                       <div className="flex items-center justify-between mt-3">
                         <div className="flex items-center border border-light-gray rounded-lg">
                           <button
-                            onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                            onClick={(e) => { e.stopPropagation(); updateQuantity(item.product.id, item.quantity - 1); }}
                             className="p-2 hover:text-gold transition-colors"
                           >
                             <FiMinus className="w-3 h-3" />
                           </button>
                           <span className="px-4 py-2 font-semibold text-sm">{item.quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                            onClick={(e) => { e.stopPropagation(); updateQuantity(item.product.id, item.quantity + 1); }}
                             className="p-2 hover:text-gold transition-colors"
                             disabled={item.quantity >= item.product.stock}
                           >
@@ -185,21 +224,21 @@ export default function CartPage() {
 
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-warm-gray">المجموع الفرعي</span>
-                    <span className="font-semibold">{formatPrice(cart.subtotal)}</span>
+                    <span className="text-warm-gray">المجموع الفرعي (المنتجات المحددة)</span>
+                    <span className="font-semibold">{formatPrice(selectedTotals.subtotal)}</span>
                   </div>
 
-                  {cart.discount > 0 && (
+                  {selectedTotals.discount > 0 && (
                     <div className="flex justify-between text-green-600">
                       <span>الخصم</span>
-                      <span>- {formatPrice(cart.discount)}</span>
+                      <span>- {formatPrice(selectedTotals.discount)}</span>
                     </div>
                   )}
 
                   <div className="border-t border-cream pt-3 flex justify-between">
                     <span className="font-semibold">المجموع النهائي</span>
                     <span className="text-xl font-bold text-gold">
-                      {formatPrice(cart.total)}
+                      {formatPrice(selectedTotals.total)}
                     </span>
                   </div>
                 </div>

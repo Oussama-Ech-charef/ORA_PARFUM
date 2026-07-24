@@ -9,15 +9,22 @@ import { FaWhatsapp } from 'react-icons/fa';
 import { SITE_CONFIG } from '@/lib/config';
 import { generateOrderId, addOrder } from '@/lib/orders';
 import { formatPrice } from '@/lib/format';
-import { PACKAGING_OPTIONS } from '@/data/packaging';
+import { generateOrderMessageForItems, computeItemsTotals } from '@/lib/cart';
 
 export default function CartDrawer() {
   const {
     cart, itemCount, isCartDrawerOpen, closeCartDrawer,
-    updateQuantity, removeFromCart, updatePackaging, clearCart, getWhatsAppUrl,
+    updateQuantity, removeFromCart, clearCart,
   } = useCart();
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [validationError, setValidationError] = useState('');
+  const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (isCartDrawerOpen) {
+      setSelectedItems(new Set(cart.items.map((item) => item.product.id)));
+    }
+  }, [isCartDrawerOpen, cart.items]);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -36,14 +43,34 @@ export default function CartDrawer() {
     return () => { document.body.style.overflow = ''; };
   }, [isCartDrawerOpen]);
 
-  const handleWhatsAppCheckout = useCallback(() => {
-    if (cart.items.length === 0) return;
+  const toggleItem = (productId: string) => {
+    setSelectedItems((prev) => {
+      const next = new Set(prev);
+      if (next.has(productId)) {
+        next.delete(productId);
+      } else {
+        next.add(productId);
+      }
+      return next;
+    });
+  };
 
-    const missingPackaging = cart.items.find(
-      (item) => !item.packagingOption
-    );
-    if (missingPackaging) {
-      setValidationError('يرجى اختيار نوع التغليف لكل منتج قبل إتمام الطلب.');
+  const allSelected = cart.items.length > 0 && cart.items.every((item) => selectedItems.has(item.product.id));
+
+  const toggleAll = () => {
+    if (allSelected) {
+      setSelectedItems(new Set());
+    } else {
+      setSelectedItems(new Set(cart.items.map((item) => item.product.id)));
+    }
+  };
+
+  const filteredItems = cart.items.filter((item) => selectedItems.has(item.product.id));
+  const selectedTotals = computeItemsTotals(filteredItems);
+
+  const handleWhatsAppCheckout = useCallback(() => {
+    if (filteredItems.length === 0) {
+      setValidationError('يرجى اختيار منتج واحد على الأقل لإتمام الطلب.');
       setTimeout(() => setValidationError(''), 4000);
       return;
     }
@@ -52,18 +79,18 @@ export default function CartDrawer() {
     const orderId = generateOrderId();
     addOrder({
       id: orderId,
-      items: [...cart.items],
-      subtotal: cart.subtotal,
-      discount: cart.discount,
-      total: cart.total,
+      items: [...filteredItems],
+      subtotal: selectedTotals.subtotal,
+      discount: selectedTotals.discount,
+      total: selectedTotals.total,
       status: 'جديد',
       createdAt: new Date().toISOString(),
     });
-    const url = getWhatsAppUrl(orderId, SITE_CONFIG.whatsappNumber);
+    const url = generateOrderMessageForItems(filteredItems, orderId, SITE_CONFIG.whatsappNumber);
     window.open(url, '_blank');
     setOrderPlaced(true);
     setTimeout(() => setOrderPlaced(false), 3000);
-  }, [cart, getWhatsAppUrl]);
+  }, [filteredItems, selectedTotals]);
 
   return (
     <>
@@ -111,6 +138,16 @@ export default function CartDrawer() {
           </div>
         ) : (
           <>
+            <div className="flex items-center justify-between px-5 pt-3 pb-1">
+              <button
+                onClick={toggleAll}
+                className="text-xs text-warm-gray hover:text-rich-black transition-colors"
+              >
+                {allSelected ? 'إلغاء تحديد الكل' : 'تحديد الكل'}
+              </button>
+              <span className="text-xs text-warm-gray">{filteredItems.length} من {cart.items.length} منتج محدد</span>
+            </div>
+
             <div className="flex-1 overflow-y-auto p-5 space-y-4">
               {cart.items.map((item) => {
                 const discountPrice = item.product.discount
@@ -119,12 +156,30 @@ export default function CartDrawer() {
                 const itemTotal = discountPrice
                   ? discountPrice * item.quantity
                   : item.product.price * item.quantity;
+                const isSelected = selectedItems.has(item.product.id);
 
                 return (
                   <div
                     key={item.product.id}
-                    className="flex gap-4 bg-ivory rounded-xl p-3"
+                    className={`flex gap-4 rounded-xl p-3 transition-colors cursor-pointer ${
+                      isSelected ? 'bg-ivory ring-1 ring-gold/20' : 'bg-ivory/60'
+                    }`}
+                    onClick={() => toggleItem(item.product.id)}
                   >
+                    <div className="flex items-center">
+                      <div
+                        className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200 ${
+                          isSelected ? 'border-gold bg-gold' : 'border-warm-gray bg-white'
+                        }`}
+                      >
+                        {isSelected && (
+                          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+
                     <div className="relative w-20 h-20 rounded-lg bg-white overflow-hidden flex-shrink-0">
                       <Image
                         src={item.product.image}
@@ -135,7 +190,7 @@ export default function CartDrawer() {
                       />
                     </div>
 
-                      <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
                           <p className="text-xs text-warm-gray truncate">{item.product.category}</p>
@@ -143,38 +198,24 @@ export default function CartDrawer() {
                           <p className="text-xs text-warm-gray">{item.product.volume}</p>
                         </div>
                         <button
-                          onClick={() => removeFromCart(item.product.id)}
+                          onClick={(e) => { e.stopPropagation(); removeFromCart(item.product.id); }}
                           className="p-1 text-warm-gray hover:text-red-500 transition-colors flex-shrink-0"
                         >
                           <FiTrash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
 
-                      <div className="mt-2 flex items-center gap-2">
-                        <span className="text-xs text-warm-gray whitespace-nowrap">التغليف:</span>
-                        <select
-                          value={item.packagingOption}
-                          onChange={(e) => updatePackaging(item.product.id, e.target.value)}
-                          className="text-xs bg-white border border-light-gray rounded-md px-2 py-1 flex-1 min-w-0 focus:outline-none focus:ring-1 focus:ring-gold/40"
-                          style={{ fontFamily: "'Cairo', sans-serif" }}
-                        >
-                          {PACKAGING_OPTIONS.map((opt) => (
-                            <option key={opt.id} value={opt.id}>{opt.label}</option>
-                          ))}
-                        </select>
-                      </div>
-
                       <div className="flex items-center justify-between mt-2">
                         <div className="flex items-center border border-light-gray rounded-lg bg-white">
                           <button
-                            onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                            onClick={(e) => { e.stopPropagation(); updateQuantity(item.product.id, item.quantity - 1); }}
                             className="p-1.5 hover:text-gold transition-colors"
                           >
                             <FiMinus className="w-3 h-3" />
                           </button>
                           <span className="px-3 py-1.5 font-semibold text-xs min-w-[1.5rem] text-center">{item.quantity}</span>
                           <button
-                            onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                            onClick={(e) => { e.stopPropagation(); updateQuantity(item.product.id, item.quantity + 1); }}
                             className="p-1.5 hover:text-gold transition-colors"
                             disabled={item.quantity >= item.product.stock}
                           >
@@ -202,19 +243,19 @@ export default function CartDrawer() {
             <div className="border-t border-cream p-5 space-y-4">
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-warm-gray">المجموع الفرعي</span>
-                  <span className="font-semibold">{formatPrice(cart.subtotal)}</span>
+                  <span className="text-warm-gray">المجموع الفرعي (المنتجات المحددة)</span>
+                  <span className="font-semibold">{formatPrice(selectedTotals.subtotal)}</span>
                 </div>
-                {cart.discount > 0 && (
+                {selectedTotals.discount > 0 && (
                   <div className="flex justify-between text-green-600">
                     <span>الخصم</span>
-                    <span>- {formatPrice(cart.discount)}</span>
+                    <span>- {formatPrice(selectedTotals.discount)}</span>
                   </div>
                 )}
                 <div className="flex justify-between border-t border-cream pt-2">
                   <span className="font-semibold">المجموع النهائي</span>
                   <span className="text-lg font-bold text-gold">
-                    {formatPrice(cart.total)}
+                    {formatPrice(selectedTotals.total)}
                   </span>
                 </div>
               </div>

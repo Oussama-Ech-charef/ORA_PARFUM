@@ -10,9 +10,7 @@ interface CartContextType {
   addToCart: (product: Product, quantity: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
-  updatePackaging: (productId: string, packagingOption: string) => void;
   clearCart: () => void;
-  getWhatsAppUrl: (orderId: string, whatsappNumber: string) => string;
   isCartDrawerOpen: boolean;
   openCartDrawer: () => void;
   closeCartDrawer: () => void;
@@ -49,20 +47,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItemCount(updated.items.reduce((sum, item) => sum + item.quantity, 0));
   }, []);
 
-  const updatePackaging = useCallback((productId: string, packagingOption: string) => {
-    const updated = cartLib.updatePackaging(productId, packagingOption);
-    setCart(updated);
-  }, []);
-
   const clearCart = useCallback(() => {
     const updated = cartLib.clearCart();
     setCart(updated);
     setItemCount(0);
   }, []);
-
-  const getWhatsAppUrl = useCallback((orderId: string, whatsappNumber: string) => {
-    return cartLib.generateOrderMessage(cart, orderId, whatsappNumber);
-  }, [cart]);
 
   const openCartDrawer = useCallback(() => {
     setIsCartDrawerOpen(true);
@@ -75,7 +64,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   return (
     <CartContext.Provider
       value={{
-        cart, itemCount, addToCart, removeFromCart, updateQuantity, updatePackaging, clearCart, getWhatsAppUrl,
+        cart, itemCount, addToCart, removeFromCart, updateQuantity, clearCart,
         isCartDrawerOpen, openCartDrawer, closeCartDrawer,
       }}
     >
