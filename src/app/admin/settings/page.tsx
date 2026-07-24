@@ -3,9 +3,19 @@
 import { useState } from 'react';
 import { defaultSettings } from '@/data/settings';
 import { FiSave } from 'react-icons/fi';
+import { SiteSettings } from '@/types';
+
+function getSavedSettings(): SiteSettings {
+  if (typeof window === 'undefined') return defaultSettings;
+  try {
+    const saved = localStorage.getItem('ora_settings');
+    if (saved) return JSON.parse(saved);
+  } catch { /* ignore */ }
+  return defaultSettings;
+}
 
 export default function AdminSettingsPage() {
-  const [form, setForm] = useState(defaultSettings);
+  const [form, setForm] = useState(getSavedSettings);
   const [saved, setSaved] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

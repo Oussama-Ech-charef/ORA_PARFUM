@@ -167,7 +167,7 @@ export default function Home() {
             نستلهم من تراثنا المغربي الغني ونمزجه بأحدث تقنيات صناعة العطور العالمية لنقدم لكم 
             تشكيلة فريدة من العطور التي تعكس شخصيتكم وترتقي بحواسكم.
           </p>
-          <Link href="/store" className="ora-btn-gold">
+          <Link href="/about" className="ora-btn-gold">
             اكتشف قصتنا
           </Link>
         </div>
