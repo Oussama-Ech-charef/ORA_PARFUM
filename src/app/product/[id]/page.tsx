@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { products } from '@/data/products';
+import { getProducts } from '@/lib/products';
 import { useCart } from '@/context/CartContext';
 import ProductCard from '@/components/ProductCard';
 import { FiShoppingCart, FiMinus, FiPlus, FiCheck } from 'react-icons/fi';
@@ -16,6 +16,7 @@ import { generateOrderId } from '@/lib/orders';
 export default function ProductPage() {
   const params = useParams();
   const { addToCart, cart } = useCart();
+  const products = getProducts();
   const product = products.find((p) => p.slug === params.id);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);

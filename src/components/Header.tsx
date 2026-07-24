@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
-import { FiShoppingCart, FiMenu, FiX } from 'react-icons/fi';
+import { FiShoppingCart, FiMenu, FiX, FiUser } from 'react-icons/fi';
 import { usePathname } from 'next/navigation';
 
 export default function Header() {
@@ -76,7 +76,17 @@ export default function Header() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
+              <Link
+              href="/admin/login"
+              className={`p-2 transition-colors duration-300 hover:text-gold ${
+                scrolled || !isHome ? 'text-rich-black' : 'text-white'
+              }`}
+              title="لوحة الإدارة"
+            >
+              <FiUser className="w-6 h-6" />
+            </Link>
+
             <button
               onClick={openCartDrawer}
               className={`relative p-2 transition-colors duration-300 hover:text-gold ${

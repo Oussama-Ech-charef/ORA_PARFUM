@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { products, categories, genders } from '@/data/products';
+import { getProducts } from '@/lib/products';
+import { categories, genders } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
 import { FiSearch, FiSliders, FiChevronDown, FiX } from 'react-icons/fi';
 
@@ -33,6 +34,7 @@ export default function StorePage() {
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
+  const products = getProducts();
   let filtered = products.filter((p) => p.active);
 
   if (search) {
@@ -81,7 +83,9 @@ export default function StorePage() {
 
       <section className="bg-white border-b border-cream">
         <div className="ora-container py-6">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+
+          {/* ── DESKTOP LAYOUT (>=1024px): original exactly ── */}
+          <div className="hidden lg:flex lg:flex-row lg:items-center gap-4">
             <div className="relative flex-1">
               <FiSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-warm-gray w-5 h-5" />
               <input
@@ -96,14 +100,14 @@ export default function StorePage() {
 
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`h-14 px-6 rounded-xl border transition-all duration-300 flex items-center justify-center gap-2.5 text-sm font-medium ${
+              className={`h-14 px-6 rounded-xl border transition-all duration-300 flex items-center justify-center gap-2.5 text-sm font-medium flex-shrink-0 ${
                 showFilters
                   ? 'bg-rich-black text-white border-rich-black'
                   : 'bg-ivory text-rich-black border-transparent hover:bg-cream'
               }`}
             >
               <FiSliders className="w-4 h-4" />
-              <span className="hidden sm:inline">فلترة</span>
+              <span>فلترة</span>
             </button>
 
             <div className="relative" ref={sortRef}>
@@ -134,7 +138,7 @@ export default function StorePage() {
 
             <button
               onClick={() => setShowDiscountOnly(!showDiscountOnly)}
-              className={`h-14 px-5 rounded-xl border transition-all duration-300 flex items-center justify-center gap-2.5 text-sm font-medium ${
+              className={`h-14 px-5 rounded-xl border transition-all duration-300 flex items-center justify-center gap-2.5 text-sm font-medium flex-shrink-0 ${
                 showDiscountOnly
                   ? 'bg-gold/10 text-gold-dark border-gold/30'
                   : 'bg-ivory text-rich-black border-transparent hover:bg-cream'
@@ -149,34 +153,153 @@ export default function StorePage() {
                   </svg>
                 )}
               </div>
-              <span className="hidden sm:inline">العروض فقط</span>
+              <span>العروض فقط</span>
             </button>
           </div>
 
-          <div className={`overflow-hidden transition-all duration-300 ${showFilters ? 'max-h-96 opacity-100 mt-5' : 'max-h-0 opacity-0'}`}>
-            <div className="pt-5 border-t border-cream">
-              <div className="flex flex-wrap items-center gap-3">
-                <span className="text-sm text-warm-gray font-medium ml-2">النوع:</span>
-                {genders.map((gen) => (
-                  <button
-                    key={gen}
-                    onClick={() => setSelectedGender(gen)}
-                    className={`px-5 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                      selectedGender === gen
-                        ? 'bg-rich-black text-white shadow-sm'
-                        : 'bg-ivory text-rich-black hover:bg-cream'
-                    }`}
-                  >
-                    {gen}
-                  </button>
-                ))}
+          {/* ── MOBILE / TABLET LAYOUT (<1024px) ── */}
+          <div className="lg:hidden flex flex-col gap-3">
+            <div className="hidden md:block relative">
+              <FiSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-warm-gray w-5 h-5" />
+              <input
+                type="text"
+                placeholder="ابحث عن عطر..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full h-12 pr-14 pl-5 bg-ivory border-0 rounded-xl text-rich-black placeholder:text-warm-gray/60 text-base transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:bg-white"
+                style={{ fontFamily: "'Cairo', sans-serif" }}
+              />
+            </div>
+
+            <div className="flex flex-row flex-wrap items-center gap-2">
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`h-10 rounded-xl border transition-all duration-300 flex items-center justify-center gap-2 text-sm font-medium px-4 ${
+                  showFilters
+                    ? 'bg-rich-black text-white border-rich-black'
+                    : 'bg-ivory text-rich-black border-transparent hover:bg-cream'
+                }`}
+              >
+                <FiSliders className="w-4 h-4" />
+                <span>فلترة</span>
+                <FiChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${showFilters ? 'rotate-180' : ''}`} />
+              </button>
+
+              <div className="relative" ref={sortRef}>
+                <button
+                  onClick={() => setSortOpen(!sortOpen)}
+                  className="h-10 px-3 bg-ivory rounded-xl border-0 text-sm font-medium text-rich-black transition-all duration-300 hover:bg-cream flex items-center justify-center gap-1.5"
+                >
+                  <span className="hidden sm:inline truncate max-w-[80px]">{currentSortLabel}</span>
+                  <span className="sm:hidden">ترتيب</span>
+                  <FiChevronDown className={`w-3.5 h-3.5 text-warm-gray transition-transform duration-300 ${sortOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {sortOpen && (
+                  <div className="absolute top-full mt-2 right-0 min-w-[180px] bg-white border border-cream rounded-xl shadow-lg z-20 py-2 overflow-hidden">
+                    {sortOptions.map((opt) => (
+                      <button
+                        key={opt.value}
+                        onClick={() => { setSortBy(opt.value); setSortOpen(false); }}
+                        className={`w-full text-right px-4 py-2.5 text-sm transition-colors hover:bg-ivory ${
+                          sortBy === opt.value ? 'text-gold font-semibold bg-ivory' : 'text-rich-black'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <button
+                onClick={() => setShowDiscountOnly(!showDiscountOnly)}
+                className={`hidden md:flex h-10 px-3 rounded-xl border transition-all duration-300 items-center justify-center gap-2 text-sm font-medium ${
+                  showDiscountOnly
+                    ? 'bg-gold/10 text-gold-dark border-gold/30'
+                    : 'bg-ivory text-rich-black border-transparent hover:bg-cream'
+                }`}
+              >
+                <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all duration-300 flex-shrink-0 ${
+                  showDiscountOnly ? 'border-gold bg-gold' : 'border-warm-gray'
+                }`}>
+                  {showDiscountOnly && (
+                    <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </div>
+                <span className="whitespace-nowrap">العروض فقط</span>
+              </button>
+            </div>
+          </div>
+
+          {/* ── FILTER PANEL (shared) ── */}
+          <div className={`overflow-hidden transition-all duration-300 ${showFilters ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
+            <div className="pt-4 border-t border-cream space-y-4">
+              <div className="md:hidden">
+                <span className="text-sm text-warm-gray font-medium block mb-2">التصنيف:</span>
+                <div className="flex flex-wrap items-center gap-2">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 ${
+                        selectedCategory === cat
+                          ? 'bg-rich-black text-white shadow-sm'
+                          : 'bg-ivory text-rich-black hover:bg-cream'
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <span className="text-sm text-warm-gray font-medium block mb-2">النوع:</span>
+                <div className="flex flex-wrap items-center gap-2">
+                  {genders.map((gen) => (
+                    <button
+                      key={gen}
+                      onClick={() => setSelectedGender(gen)}
+                      className={`px-3 md:px-5 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-all duration-300 ${
+                        selectedGender === gen
+                          ? 'bg-rich-black text-white shadow-sm'
+                          : 'bg-ivory text-rich-black hover:bg-cream'
+                      }`}
+                    >
+                      {gen}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="md:hidden pt-2 border-t border-cream/60">
+                <button
+                  onClick={() => setShowDiscountOnly(!showDiscountOnly)}
+                  className={`flex items-center gap-2.5 text-sm font-medium transition-colors ${
+                    showDiscountOnly ? 'text-gold-dark' : 'text-rich-black'
+                  }`}
+                >
+                  <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-300 flex-shrink-0 ${
+                    showDiscountOnly ? 'border-gold bg-gold' : 'border-warm-gray'
+                  }`}>
+                    {showDiscountOnly && (
+                      <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                    )}
+                  </div>
+                  <span>العروض فقط</span>
+                </button>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-white/80 border-b border-cream">
+      <section className="hidden md:block bg-white/80 border-b border-cream">
         <div className="ora-container py-4">
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
             {categories.map((cat) => (

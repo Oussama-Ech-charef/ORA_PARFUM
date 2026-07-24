@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { products } from '@/data/products';
+import { getProducts } from '@/lib/products';
 import ProductCard from '@/components/ProductCard';
 import { FiChevronDown, FiStar, FiShield, FiTruck, FiArrowLeft } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
@@ -12,9 +12,10 @@ import { getInquiryWhatsAppUrl } from '@/lib/config';
 export default function Home() {
   const [heroLoaded, setHeroLoaded] = useState(false);
 
-  const featuredProducts = products.filter((p) => p.active).slice(0, 4);
-  const discountedProducts = products.filter((p) => p.discount && p.active);
-  const newProducts = [...products].filter((p) => p.active).slice(0, 4);
+  const allProducts = getProducts();
+  const featuredProducts = allProducts.filter((p) => p.active).slice(0, 4);
+  const discountedProducts = allProducts.filter((p) => p.discount && p.active);
+  const newProducts = [...allProducts].filter((p) => p.active).slice(0, 4);
 
   return (
     <>
