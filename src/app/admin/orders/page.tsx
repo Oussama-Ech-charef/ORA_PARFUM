@@ -40,11 +40,11 @@ export default function AdminOrdersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-rich-black">إدارة الطلبات</h1>
-        <p className="text-warm-gray text-sm">متابعة وتحديث حالات الطلبات</p>
+        <h1 className="text-xl md:text-2xl font-bold text-rich-black">إدارة الطلبات</h1>
+        <p className="text-warm-gray text-xs md:text-sm">متابعة وتحديث حالات الطلبات</p>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
         <div className="relative flex-1">
           <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-warm-gray" />
           <input
@@ -58,7 +58,7 @@ export default function AdminOrdersPage() {
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="ora-input sm:w-48"
+          className="ora-input sm:w-48 appearance-none"
         >
           <option value="">جميع الحالات</option>
           {statuses.map((s) => (
@@ -68,7 +68,7 @@ export default function AdminOrdersPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="bg-white border border-cream rounded-xl p-12 text-center">
+        <div className="bg-white border border-cream rounded-xl p-8 md:p-12 text-center">
           <p className="text-warm-gray">لا توجد طلبات</p>
         </div>
       ) : (
@@ -79,8 +79,8 @@ export default function AdminOrdersPage() {
                 onClick={() => setExpandedOrder(expandedOrder === order.id ? null : order.id)}
                 className="w-full p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-ivory/50 transition-colors text-right"
               >
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                  <span className="font-bold text-gold text-sm sm:text-base">#{order.id}</span>
+                <div className="flex flex-wrap items-center gap-x-3 md:gap-x-4 gap-y-1">
+                  <span className="font-bold text-gold text-sm sm:text-base truncate max-w-[120px] sm:max-w-none">#{order.id}</span>
                   <span className="text-warm-gray text-xs sm:text-sm">
                     {order.items.length} منتج
                   </span>
@@ -128,12 +128,12 @@ export default function AdminOrdersPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 pt-2">
-                    <span className="text-sm text-warm-gray">تحديث الحالة:</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 pt-2">
+                    <span className="text-sm text-warm-gray whitespace-nowrap">تحديث الحالة:</span>
                     <select
                       value={order.status}
                       onChange={(e) => handleStatusChange(order.id, e.target.value as OrderStatus)}
-                      className="ora-input text-sm flex-1"
+                       className="ora-input text-sm w-full sm:w-auto sm:max-w-[240px] appearance-none"
                     >
                       {statuses.map((s) => (
                         <option key={s} value={s}>{s}</option>

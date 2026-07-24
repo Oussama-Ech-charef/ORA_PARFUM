@@ -31,13 +31,13 @@ export default function AdminMessagesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-rich-black">الرسائل والطلبات</h1>
-        <p className="text-warm-gray text-sm">إدارة طلبات واتساب الواردة</p>
+        <h1 className="text-xl md:text-2xl font-bold text-rich-black">الرسائل والطلبات</h1>
+        <p className="text-warm-gray text-xs md:text-sm">إدارة طلبات واتساب الواردة</p>
       </div>
 
       {orders.length === 0 ? (
-        <div className="bg-white border border-cream rounded-xl p-12 text-center">
-          <FiMessageSquare className="w-16 h-16 text-warm-gray mx-auto mb-4" />
+        <div className="bg-white border border-cream rounded-xl p-8 md:p-12 text-center">
+          <FiMessageSquare className="w-12 h-12 md:w-16 md:h-16 text-warm-gray mx-auto mb-4" />
           <p className="text-warm-gray">لا توجد رسائل أو طلبات بعد</p>
           <p className="text-sm text-warm-gray mt-1">عندما يرسل العملاء طلبات عبر واتساب، ستظهر هنا</p>
         </div>

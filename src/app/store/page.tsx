@@ -159,14 +159,14 @@ export default function StorePage() {
 
           {/* ── MOBILE / TABLET LAYOUT (<1024px) ── */}
           <div className="lg:hidden flex flex-col gap-3">
-            <div className="hidden md:block relative">
-              <FiSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-warm-gray w-5 h-5" />
+            <div className="relative">
+              <FiSearch className="absolute right-4 md:right-5 top-1/2 -translate-y-1/2 text-warm-gray w-4 h-4 md:w-5 md:h-5" />
               <input
                 type="text"
                 placeholder="ابحث عن عطر..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-12 pr-14 pl-5 bg-ivory border-0 rounded-xl text-rich-black placeholder:text-warm-gray/60 text-base transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:bg-white"
+                className="w-full h-10 md:h-12 pr-10 md:pr-14 pl-3 md:pl-5 bg-ivory border-0 rounded-xl text-rich-black placeholder:text-warm-gray/60 text-sm md:text-base transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:bg-white"
                 style={{ fontFamily: "'Cairo', sans-serif" }}
               />
             </div>

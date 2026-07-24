@@ -65,22 +65,22 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-rich-black">لوحة الإحصائيات</h1>
-        <p className="text-warm-gray text-sm">نظرة عامة على متجر ORA PARFUM</p>
+        <h1 className="text-xl md:text-2xl font-bold text-rich-black">لوحة الإحصائيات</h1>
+        <p className="text-warm-gray text-xs md:text-sm">نظرة عامة على متجر ORA PARFUM</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.label} className="bg-white border border-cream rounded-xl p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-warm-gray">{stat.label}</p>
-                  <p className="text-2xl font-bold mt-1">{stat.value}</p>
+            <div key={stat.label} className="bg-white border border-cream rounded-xl p-4 md:p-6">
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-xs md:text-sm text-warm-gray">{stat.label}</p>
+                  <p className="text-xl md:text-2xl font-bold mt-1 truncate">{stat.value}</p>
                 </div>
-                <div className={`w-12 h-12 rounded-lg ${stat.bg} flex items-center justify-center`}>
-                  <Icon className={`w-6 h-6 ${stat.color}`} />
+                <div className={`w-10 h-10 md:w-12 md:h-12 rounded-lg ${stat.bg} flex items-center justify-center flex-shrink-0`}>
+                  <Icon className={`w-5 h-5 md:w-6 md:h-6 ${stat.color}`} />
                 </div>
               </div>
             </div>
@@ -105,9 +105,9 @@ export default function AdminDashboard() {
       )}
 
       <div className="bg-white border border-cream rounded-xl p-4 md:p-6">
-        <h2 className="text-lg font-semibold mb-4">آخر الطلبات</h2>
+        <h2 className="text-base md:text-lg font-semibold mb-4">آخر الطلبات</h2>
         {orders.length === 0 ? (
-          <p className="text-warm-gray text-center py-8">لا توجد طلبات بعد</p>
+          <p className="text-warm-gray text-center py-6 md:py-8 text-sm">لا توجد طلبات بعد</p>
         ) : (
           <>
             <div className="hidden md:block overflow-x-auto">
