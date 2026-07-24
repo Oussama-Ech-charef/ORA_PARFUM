@@ -5,6 +5,7 @@ import { getOrders, updateOrderStatus } from '@/lib/orders';
 import { Order, OrderStatus } from '@/types';
 import { FiSearch, FiChevronDown } from 'react-icons/fi';
 import { formatPrice } from '@/lib/format';
+import Select from '@/components/Select';
 
 const statuses: OrderStatus[] = ['جديد', 'قيد المعالجة', 'تم التأكيد', 'تم الشحن', 'مكتمل', 'ملغى'];
 const statusColors: Record<string, string> = {
@@ -55,16 +56,12 @@ export default function AdminOrdersPage() {
             className="ora-input pr-12"
           />
         </div>
-        <select
+        <Select
+          options={[{ value: '', label: 'جميع الحالات' }, ...statuses.map((s) => ({ value: s, label: s }))]}
           value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
-          className="ora-input sm:w-48 appearance-none"
-        >
-          <option value="">جميع الحالات</option>
-          {statuses.map((s) => (
-            <option key={s} value={s}>{s}</option>
-          ))}
-        </select>
+          onChange={setFilterStatus}
+          className="sm:w-48"
+        />
       </div>
 
       {filtered.length === 0 ? (
@@ -130,15 +127,12 @@ export default function AdminOrdersPage() {
 
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 pt-2">
                     <span className="text-sm text-warm-gray whitespace-nowrap">تحديث الحالة:</span>
-                    <select
+                    <Select
+                      options={statuses.map((s) => ({ value: s, label: s }))}
                       value={order.status}
-                      onChange={(e) => handleStatusChange(order.id, e.target.value as OrderStatus)}
-                       className="ora-input text-sm w-full sm:w-auto sm:max-w-[240px] appearance-none"
-                    >
-                      {statuses.map((s) => (
-                        <option key={s} value={s}>{s}</option>
-                      ))}
-                    </select>
+                      onChange={(val) => handleStatusChange(order.id, val as OrderStatus)}
+                      className="w-full sm:w-auto sm:max-w-[240px]"
+                    />
                   </div>
                 </div>
               )}

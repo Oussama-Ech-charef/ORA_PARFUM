@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { FiArrowRight } from 'react-icons/fi';
 import { getProductById, updateProduct } from '@/lib/products';
+import Select from '@/components/Select';
 
 export default function EditProductPage() {
   const router = useRouter();
@@ -100,22 +101,30 @@ export default function EditProductPage() {
           </div>
           <div>
             <label className="block text-sm font-medium mb-1.5">التصنيف</label>
-            <select name="category" value={form.category} onChange={handleChange} className="ora-input appearance-none" required>
-              <option value="">اختر التصنيف</option>
-              <option value="عطور شرقية">عطور شرقية</option>
-              <option value="عطور زهرية">عطور زهرية</option>
-              <option value="عطور بحرية">عطور بحرية</option>
-              <option value="عطور فاخرة">عطور فاخرة</option>
-            </select>
+            <Select
+              options={[
+                { value: '', label: 'اختر التصنيف' },
+                { value: 'عطور شرقية', label: 'عطور شرقية' },
+                { value: 'عطور زهرية', label: 'عطور زهرية' },
+                { value: 'عطور بحرية', label: 'عطور بحرية' },
+                { value: 'عطور فاخرة', label: 'عطور فاخرة' },
+              ]}
+              value={form.category}
+              onChange={(val) => setForm((prev) => ({ ...prev, category: val }))}
+            />
           </div>
           <div>
             <label className="block text-sm font-medium mb-1.5">النوع</label>
-            <select name="gender" value={form.gender} onChange={handleChange} className="ora-input appearance-none" required>
-              <option value="">اختر النوع</option>
-              <option value="للجنسين">للجنسين</option>
-              <option value="رجالي">رجالي</option>
-              <option value="نسائي">نسائي</option>
-            </select>
+            <Select
+              options={[
+                { value: '', label: 'اختر النوع' },
+                { value: 'للجنسين', label: 'للجنسين' },
+                { value: 'رجالي', label: 'رجالي' },
+                { value: 'نسائي', label: 'نسائي' },
+              ]}
+              value={form.gender}
+              onChange={(val) => setForm((prev) => ({ ...prev, gender: val }))}
+            />
           </div>
         </div>
 
