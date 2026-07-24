@@ -67,12 +67,12 @@ export default function EditProductPage() {
           <FiArrowRight className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-rich-black">تعديل المنتج</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-rich-black">تعديل المنتج</h1>
           <p className="text-warm-gray text-sm">{product.name}</p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white border border-cream rounded-xl p-6 space-y-4">
+      <form onSubmit={handleSubmit} className="bg-white border border-cream rounded-xl p-4 md:p-6 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-1.5">اسم المنتج</label>
@@ -100,7 +100,7 @@ export default function EditProductPage() {
           </div>
           <div>
             <label className="block text-sm font-medium mb-1.5">التصنيف</label>
-            <select name="category" value={form.category} onChange={handleChange} className="ora-input" required>
+            <select name="category" value={form.category} onChange={handleChange} className="ora-input appearance-none" required>
               <option value="">اختر التصنيف</option>
               <option value="عطور شرقية">عطور شرقية</option>
               <option value="عطور زهرية">عطور زهرية</option>
@@ -110,7 +110,7 @@ export default function EditProductPage() {
           </div>
           <div>
             <label className="block text-sm font-medium mb-1.5">النوع</label>
-            <select name="gender" value={form.gender} onChange={handleChange} className="ora-input" required>
+            <select name="gender" value={form.gender} onChange={handleChange} className="ora-input appearance-none" required>
               <option value="">اختر النوع</option>
               <option value="للجنسين">للجنسين</option>
               <option value="رجالي">رجالي</option>

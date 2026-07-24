@@ -37,10 +37,10 @@ export default function AdminProductsPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-rich-black">إدارة المنتجات</h1>
-          <p className="text-warm-gray text-sm">إضافة وتعديل وحذف المنتجات</p>
-        </div>
+      <div>
+        <h1 className="text-xl md:text-2xl font-bold text-rich-black">إدارة المنتجات</h1>
+        <p className="text-warm-gray text-xs md:text-sm">إضافة وتعديل وحذف المنتجات</p>
+      </div>
         <Link
           href="/admin/products/new"
           className="bg-rich-black text-white px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-black transition-colors flex items-center justify-center gap-2 self-start sm:self-auto"
@@ -143,8 +143,8 @@ export default function AdminProductsPage() {
         <div className="md:hidden divide-y divide-cream">
           {filtered.map((product) => (
             <div key={product.id} className="p-4">
-              <div className="flex items-start gap-3 mb-3">
-                <div className="w-14 h-14 rounded-lg bg-ivory-dark overflow-hidden flex-shrink-0">
+              <div className="flex items-start gap-2.5 mb-2.5">
+                <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-ivory-dark overflow-hidden flex-shrink-0">
                   <Image
                     src={product.image}
                     alt={product.name}
@@ -156,7 +156,7 @@ export default function AdminProductsPage() {
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm truncate">{product.name}</p>
                   <p className="text-xs text-warm-gray">{product.volume}</p>
-                  <p className="text-xs text-warm-gray mt-0.5">{product.category}</p>
+                  <p className="text-xs text-warm-gray mt-0.5 truncate">{product.category}</p>
                 </div>
                 <button
                   onClick={() => handleToggleActive(product.id)}
@@ -170,30 +170,30 @@ export default function AdminProductsPage() {
                 </button>
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div>
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="whitespace-nowrap">
                     <span className="font-semibold text-sm">{formatPrice(product.price)}</span>
                     {product.discount && (
                       <span className="text-xs text-green-600 mr-1">-{product.discount}%</span>
                     )}
                   </div>
-                  <span className={`text-xs ${product.stock <= 5 ? 'text-red-500 font-medium' : 'text-warm-gray'}`}>
-                    المخزون: {product.stock}
+                  <span className={`text-xs whitespace-nowrap ${product.stock <= 5 ? 'text-red-500 font-medium' : 'text-warm-gray'}`}>
+                    {product.stock}
                   </span>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-0.5 flex-shrink-0">
                   <Link
                     href={`/admin/products/edit/${product.id}`}
-                    className="p-2 text-warm-gray hover:text-gold transition-colors"
+                    className="p-1.5 md:p-2 text-warm-gray hover:text-gold transition-colors"
                   >
-                    <FiEdit2 className="w-4 h-4" />
+                    <FiEdit2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
                   </Link>
                   <button
                     onClick={() => handleDelete(product.id)}
-                    className="p-2 text-warm-gray hover:text-red-500 transition-colors"
+                    className="p-1.5 md:p-2 text-warm-gray hover:text-red-500 transition-colors"
                   >
-                    <FiTrash2 className="w-4 h-4" />
+                    <FiTrash2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
                   </button>
                 </div>
               </div>
