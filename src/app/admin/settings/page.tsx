@@ -23,11 +23,11 @@ export default function AdminSettingsPage() {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-rich-black">الإعدادات</h1>
-        <p className="text-warm-gray text-sm">إعدادات الموقع وواتساب</p>
+        <h1 className="text-xl md:text-2xl font-bold text-rich-black">الإعدادات</h1>
+        <p className="text-warm-gray text-xs md:text-sm">إعدادات الموقع وواتساب</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white border border-cream rounded-xl p-6 space-y-6">
+      <form onSubmit={handleSubmit} className="bg-white border border-cream rounded-xl p-4 md:p-6 space-y-5 md:space-y-6">
         <div>
           <h2 className="text-lg font-semibold mb-4 pb-2 border-b border-cream">معلومات المتجر</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -37,7 +37,7 @@ export default function AdminSettingsPage() {
             </div>
             <div>
               <label className="block text-sm font-medium mb-1.5">رقم واتساب</label>
-              <input name="whatsappNumber" value={form.whatsappNumber} onChange={handleChange} className="ora-input" dir="ltr" placeholder="212600000000" />
+               <input name="whatsappNumber" value={form.whatsappNumber} onChange={handleChange} className="ora-input" dir="ltr" placeholder="212639860777" />
             </div>
             <div className="md:col-span-2">
               <label className="block text-sm font-medium mb-1.5">وصف المتجر</label>

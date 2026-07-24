@@ -1,10 +1,10 @@
 import { SiteSettings } from '@/types';
 
 export const defaultSettings: SiteSettings = {
-  whatsappNumber: '212600000000',
+  whatsappNumber: '212639860777',
   storeName: 'ORA PARFUM',
   storeDescription: 'عطور فاخرة - الجودة والأناقة',
-  contactPhone: '+212 600 000 000',
+  contactPhone: '+212 639 860 777',
   contactEmail: 'contact@oraparfum.com',
   address: 'الدار البيضاء، المغرب',
   instagram: 'https://instagram.com/oraparfum',

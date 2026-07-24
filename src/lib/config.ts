@@ -1,7 +1,7 @@
 export const SITE_CONFIG = {
-  whatsappNumber: '212600000000',
+  whatsappNumber: '212639860777',
   storeName: 'ORA PARFUM',
-  contactPhone: '+212 600 000 000',
+  contactPhone: '+212 639 860 777',
   contactEmail: 'contact@oraparfum.com',
   address: 'الدار البيضاء، المغرب',
 };
