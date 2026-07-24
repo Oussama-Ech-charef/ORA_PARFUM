@@ -77,14 +77,14 @@ export default function AdminOrdersPage() {
             <div key={order.id} className="bg-white border border-cream rounded-xl overflow-hidden">
               <button
                 onClick={() => setExpandedOrder(expandedOrder === order.id ? null : order.id)}
-                className="w-full p-4 flex items-center justify-between hover:bg-ivory/50 transition-colors"
+                className="w-full p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-ivory/50 transition-colors text-right"
               >
-                <div className="flex items-center gap-4">
-                  <span className="font-bold text-gold">#{order.id}</span>
-                  <span className="text-warm-gray text-sm">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                  <span className="font-bold text-gold text-sm sm:text-base">#{order.id}</span>
+                  <span className="text-warm-gray text-xs sm:text-sm">
                     {order.items.length} منتج
                   </span>
-                  <span className="font-semibold">{formatPrice(order.total)}</span>
+                  <span className="font-semibold text-sm sm:text-base">{formatPrice(order.total)}</span>
                   <span className={`ora-badge text-xs ${statusColors[order.status]}`}>
                     {order.status}
                   </span>

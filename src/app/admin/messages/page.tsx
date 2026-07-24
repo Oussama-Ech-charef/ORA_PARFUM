@@ -47,15 +47,15 @@ export default function AdminMessagesPage() {
             <div key={order.id} className="bg-white border border-cream rounded-xl overflow-hidden">
               <div
                 onClick={() => setExpandedId(expandedId === order.id ? null : order.id)}
-                className="p-4 flex items-center justify-between cursor-pointer hover:bg-ivory/50 transition-colors"
+                className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 cursor-pointer hover:bg-ivory/50 transition-colors text-right"
               >
-                <div className="flex items-center gap-4">
-                  <div className={`w-2 h-2 rounded-full ${order.status === 'جديد' ? 'bg-blue-500' : 'bg-gray-300'}`} />
-                  <span className="font-bold text-gold">#{order.id}</span>
-                  <span className="text-sm text-warm-gray">{order.items.length} منتج</span>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                  <div className={`w-2 h-2 rounded-full ${order.status === 'جديد' ? 'bg-blue-500' : 'bg-gray-300'} flex-shrink-0`} />
+                  <span className="font-bold text-gold text-sm sm:text-base">#{order.id}</span>
+                  <span className="text-xs sm:text-sm text-warm-gray">{order.items.length} منتج</span>
                   <span className={`ora-badge text-xs ${statusColors[order.status]}`}>{order.status}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mr-5 sm:mr-0">
                   <span className="text-sm font-semibold">{formatPrice(order.total)}</span>
                   <span className="text-xs text-warm-gray">{new Date(order.createdAt).toLocaleDateString('ar-MA')}</span>
                 </div>
@@ -79,8 +79,8 @@ export default function AdminMessagesPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 pt-2 border-t border-cream">
-                    <span className="text-sm font-medium">تحديث الحالة:</span>
+                  <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-cream">
+                    <span className="text-sm font-medium ml-1">تحديث الحالة:</span>
                     {['جديد', 'قيد المعالجة', 'تم التأكيد', 'تم الشحن', 'مكتمل'].map((status) => (
                       <button
                         key={status}

@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { useCart } from '@/context/CartContext';
 import { FiMinus, FiPlus, FiTrash2, FiShoppingBag, FiArrowRight, FiAlertCircle } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
-import { generateOrderId, addOrder } from '@/lib/orders';
 import { formatPrice } from '@/lib/format';
 import { SITE_CONFIG } from '@/lib/config';
 import { generateOrderMessageForItems, computeItemsTotals } from '@/lib/cart';
@@ -50,16 +49,7 @@ export default function CartPage() {
     }
     setValidationError('');
 
-    const orderId = generateOrderId();
-    addOrder({
-      id: orderId,
-      items: [...filteredItems],
-      subtotal: selectedTotals.subtotal,
-      discount: selectedTotals.discount,
-      total: selectedTotals.total,
-      status: 'جديد',
-      createdAt: new Date().toISOString(),
-    });
+    const orderId = `#ORA-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
     const url = generateOrderMessageForItems(filteredItems, orderId, SITE_CONFIG.whatsappNumber);
     window.open(url, '_blank');
     setOrderPlaced(true);
