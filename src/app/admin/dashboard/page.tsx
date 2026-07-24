@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { products } from '@/data/products';
+import { getProducts } from '@/lib/products';
 import { getOrders } from '@/lib/orders';
 import { Order } from '@/types';
 import { FiPackage, FiShoppingBag, FiDollarSign, FiAlertTriangle } from 'react-icons/fi';
@@ -24,11 +24,12 @@ export default function AdminDashboard() {
     );
   }
 
-  const activeProducts = products.filter((p) => p.active);
+  const allProducts = getProducts();
+  const activeProducts = allProducts.filter((p) => p.active);
   const newOrders = orders.filter((o) => o.status === 'جديد');
   const completedOrders = orders.filter((o) => o.status === 'مكتمل');
   const totalSales = orders.reduce((sum, o) => sum + o.total, 0);
-  const lowStock = products.filter((p) => p.active && p.stock <= 5);
+  const lowStock = allProducts.filter((p) => p.active && p.stock <= 5);
 
   const stats = [
     {
@@ -103,51 +104,81 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      <div className="bg-white border border-cream rounded-xl p-6">
+      <div className="bg-white border border-cream rounded-xl p-4 md:p-6">
         <h2 className="text-lg font-semibold mb-4">آخر الطلبات</h2>
         {orders.length === 0 ? (
           <p className="text-warm-gray text-center py-8">لا توجد طلبات بعد</p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-cream">
-                  <th className="text-right py-3 px-2 font-medium text-warm-gray">رقم الطلب</th>
-                  <th className="text-right py-3 px-2 font-medium text-warm-gray">المنتجات</th>
-                  <th className="text-right py-3 px-2 font-medium text-warm-gray">المجموع</th>
-                  <th className="text-right py-3 px-2 font-medium text-warm-gray">الحالة</th>
-                  <th className="text-right py-3 px-2 font-medium text-warm-gray">التاريخ</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.slice(0, 5).map((order) => (
-                  <tr key={order.id} className="border-b border-cream/50 hover:bg-ivory/50">
-                    <td className="py-3 px-2 font-medium">#{order.id}</td>
-                    <td className="py-3 px-2">{order.items.length} منتج</td>
-                    <td className="py-3 px-2">{formatPrice(order.total)}</td>
-                    <td className="py-3 px-2">
-                      <span
-                        className={`ora-badge text-xs ${
-                          order.status === 'جديد'
-                            ? 'bg-blue-100 text-blue-700'
-                            : order.status === 'مكتمل'
-                            ? 'bg-green-100 text-green-700'
-                            : order.status === 'ملغى'
-                            ? 'bg-red-100 text-red-700'
-                            : 'bg-yellow-100 text-yellow-700'
-                        }`}
-                      >
-                        {order.status}
-                      </span>
-                    </td>
-                    <td className="py-3 px-2 text-warm-gray">
-                      {new Date(order.createdAt).toLocaleDateString('ar-MA')}
-                    </td>
+          <>
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-cream">
+                    <th className="text-right py-3 px-2 font-medium text-warm-gray">رقم الطلب</th>
+                    <th className="text-right py-3 px-2 font-medium text-warm-gray">المنتجات</th>
+                    <th className="text-right py-3 px-2 font-medium text-warm-gray">المجموع</th>
+                    <th className="text-right py-3 px-2 font-medium text-warm-gray">الحالة</th>
+                    <th className="text-right py-3 px-2 font-medium text-warm-gray">التاريخ</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {orders.slice(0, 5).map((order) => (
+                    <tr key={order.id} className="border-b border-cream/50 hover:bg-ivory/50">
+                      <td className="py-3 px-2 font-medium">#{order.id}</td>
+                      <td className="py-3 px-2">{order.items.length} منتج</td>
+                      <td className="py-3 px-2">{formatPrice(order.total)}</td>
+                      <td className="py-3 px-2">
+                        <span
+                          className={`ora-badge text-xs ${
+                            order.status === 'جديد'
+                              ? 'bg-blue-100 text-blue-700'
+                              : order.status === 'مكتمل'
+                              ? 'bg-green-100 text-green-700'
+                              : order.status === 'ملغى'
+                              ? 'bg-red-100 text-red-700'
+                              : 'bg-yellow-100 text-yellow-700'
+                          }`}
+                        >
+                          {order.status}
+                        </span>
+                      </td>
+                      <td className="py-3 px-2 text-warm-gray">
+                        {new Date(order.createdAt).toLocaleDateString('ar-MA')}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="md:hidden space-y-3">
+              {orders.slice(0, 5).map((order) => (
+                <div key={order.id} className="border border-cream rounded-lg p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-bold text-gold text-sm">#{order.id}</span>
+                    <span className={`ora-badge text-xs ${
+                      order.status === 'جديد'
+                        ? 'bg-blue-100 text-blue-700'
+                        : order.status === 'مكتمل'
+                        ? 'bg-green-100 text-green-700'
+                        : order.status === 'ملغى'
+                        ? 'bg-red-100 text-red-700'
+                        : 'bg-yellow-100 text-yellow-700'
+                    }`}>
+                      {order.status}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-warm-gray">{order.items.length} منتج</span>
+                    <span className="font-semibold">{formatPrice(order.total)}</span>
+                  </div>
+                  <p className="text-xs text-warm-gray mt-1">
+                    {new Date(order.createdAt).toLocaleDateString('ar-MA')}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
     </div>

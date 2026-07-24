@@ -1,25 +1,28 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { FiArrowRight } from 'react-icons/fi';
-import { addProduct } from '@/lib/products';
+import { getProductById, updateProduct } from '@/lib/products';
 
-export default function NewProductPage() {
+export default function EditProductPage() {
   const router = useRouter();
+  const params = useParams();
+  const product = getProductById(params.id as string);
+
   const [form, setForm] = useState({
-    name: '',
-    slug: '',
-    price: '',
-    discount: '',
-    stock: '',
-    volume: '',
-    description: '',
-    notes: '',
-    category: '',
-    gender: '',
-    image: '',
+    name: product?.name || '',
+    slug: product?.slug || '',
+    price: product?.price?.toString() || '',
+    discount: product?.discount?.toString() || '',
+    stock: product?.stock?.toString() || '',
+    volume: product?.volume || '',
+    description: product?.description || '',
+    notes: product?.notes || '',
+    category: product?.category || '',
+    gender: product?.gender || '',
+    image: product?.image || '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -27,10 +30,20 @@ export default function NewProductPage() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  if (!product) {
+    return (
+      <div className="text-center py-20">
+        <p className="text-warm-gray">المنتج غير موجود</p>
+        <Link href="/admin/products" className="text-gold hover:underline mt-4 inline-block">
+          العودة إلى قائمة المنتجات
+        </Link>
+      </div>
+    );
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    addProduct({
-      id: Date.now().toString(),
+    updateProduct(product.id, {
       name: form.name,
       slug: form.slug,
       price: Number(form.price),
@@ -41,11 +54,9 @@ export default function NewProductPage() {
       notes: form.notes,
       category: form.category,
       gender: form.gender,
-      image: form.image || '/images/products/ora-black.jpg',
-      active: true,
-      createdAt: new Date().toISOString().split('T')[0],
+      image: form.image || product.image,
     });
-    alert('تم إضافة المنتج بنجاح');
+    alert('تم تحديث المنتج بنجاح');
     router.push('/admin/products');
   };
 
@@ -56,8 +67,8 @@ export default function NewProductPage() {
           <FiArrowRight className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-rich-black">إضافة منتج جديد</h1>
-          <p className="text-warm-gray text-sm">أدخل معلومات المنتج الجديد</p>
+          <h1 className="text-2xl font-bold text-rich-black">تعديل المنتج</h1>
+          <p className="text-warm-gray text-sm">{product.name}</p>
         </div>
       </div>
 
@@ -124,7 +135,7 @@ export default function NewProductPage() {
         </div>
 
         <button type="submit" className="ora-btn-primary w-full">
-          إضافة المنتج
+          تحديث المنتج
         </button>
       </form>
     </div>
