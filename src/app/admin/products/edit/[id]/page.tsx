@@ -77,31 +77,31 @@ export default function EditProductPage() {
       <form onSubmit={handleSubmit} className="bg-white border border-cream rounded-xl p-4 md:p-6 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium mb-1.5">اسم المنتج</label>
+            <label className="ora-label">اسم المنتج</label>
             <input name="name" value={form.name} onChange={handleChange} className="ora-input" required />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1.5">الرابط (Slug)</label>
+            <label className="ora-label">الرابط (Slug)</label>
             <input name="slug" value={form.slug} onChange={handleChange} className="ora-input" dir="ltr" required />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1.5">السعر (درهم)</label>
+            <label className="ora-label">السعر (درهم)</label>
             <input type="number" name="price" value={form.price} onChange={handleChange} className="ora-input" required />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1.5">الخصم (%)</label>
+            <label className="ora-label">الخصم (%)</label>
             <input type="number" name="discount" value={form.discount} onChange={handleChange} className="ora-input" />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1.5">المخزون</label>
+            <label className="ora-label">المخزون</label>
             <input type="number" name="stock" value={form.stock} onChange={handleChange} className="ora-input" required />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1.5">الحجم</label>
+            <label className="ora-label">الحجم</label>
             <input name="volume" value={form.volume} onChange={handleChange} className="ora-input" placeholder="مثال: 100 مل" required />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1.5">التصنيف</label>
+            <label className="ora-label">التصنيف</label>
             <Select
               options={[
                 { value: '', label: 'اختر التصنيف' },
@@ -115,7 +115,7 @@ export default function EditProductPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1.5">النوع</label>
+            <label className="ora-label">النوع</label>
             <Select
               options={[
                 { value: '', label: 'اختر النوع' },
@@ -130,13 +130,13 @@ export default function EditProductPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1.5">الوصف</label>
-          <textarea name="description" value={form.description} onChange={handleChange} className="ora-input min-h-[100px]" required />
+          <label className="ora-label">الوصف</label>
+          <textarea name="description" value={form.description} onChange={handleChange} className="ora-textarea" required />
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1.5">النفحات العطرية</label>
-          <textarea name="notes" value={form.notes} onChange={handleChange} className="ora-input min-h-[80px]" required />
+          <label className="ora-label">النفحات العطرية</label>
+          <textarea name="notes" value={form.notes} onChange={handleChange} className="ora-textarea" required />
         </div>
 
         <div>
