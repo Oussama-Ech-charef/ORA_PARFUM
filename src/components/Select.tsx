@@ -152,7 +152,7 @@ export default function Select({ options, value, onChange, placeholder, classNam
         maxHeight: `${DROPDOWN_MAX_HEIGHT}px`,
         overflowY: 'auto',
       }}
-      className="z-[9999] bg-white border border-cream rounded-lg shadow-lg overflow-hidden"
+      className="z-[9999] bg-white border border-cream rounded-xl shadow-xl overflow-hidden"
     >
       {options.map((option, index) => (
         <button
@@ -160,12 +160,12 @@ export default function Select({ options, value, onChange, placeholder, classNam
           type="button"
           onClick={() => selectOption(option.value)}
           onMouseEnter={() => setActiveIndex(index)}
-          className={`w-full text-right px-4 py-2.5 text-sm transition-colors font-sans cursor-pointer ${
+          className={`w-full text-right px-4 py-3 text-sm transition-all font-sans cursor-pointer ${
             option.value === value
-              ? 'text-gold font-semibold bg-ivory'
+              ? 'text-gold font-semibold bg-gold/5'
               : index === activeIndex
                 ? 'bg-ivory text-rich-black'
-                : 'text-rich-black hover:bg-ivory'
+                : 'text-rich-black hover:bg-ivory-dark'
           }`}
           role="option"
           aria-selected={option.value === value}
@@ -183,7 +183,7 @@ export default function Select({ options, value, onChange, placeholder, classNam
         ref={triggerRef}
         type="button"
         onClick={() => (open ? closeDropdown() : openDropdown())}
-        className="w-full flex items-center justify-between gap-2 bg-white border border-light-gray rounded-lg px-4 py-3 text-sm text-rich-black font-sans cursor-pointer transition-all duration-300 hover:border-gold-light focus:outline-none focus:border-gold focus:shadow-[0_0_0_3px_var(--gold-glow)]"
+        className={`ora-select-trigger ${selectedOption ? '' : 'placeholder'} ${open ? 'open' : ''}`}
         aria-haspopup="listbox"
         aria-expanded={open}
       >

@@ -161,87 +161,557 @@ html {
   box-shadow: 0 8px 32px rgba(201, 169, 110, 0.1);
 }
 
+/* ─── Buttons ─── */
 .ora-btn-primary {
   background: linear-gradient(135deg, var(--black) 0%, var(--rich-black) 100%);
   color: var(--white);
   padding: 0.75rem 2rem;
-  border-radius: 8px;
+  border-radius: 12px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   border: 1px solid transparent;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  font-size: 0.9375rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .ora-btn-primary:hover {
   background: linear-gradient(135deg, var(--rich-black) 0%, var(--black) 100%);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.ora-btn-primary:active {
+  transform: translateY(0);
 }
 
 .ora-btn-secondary {
   background: transparent;
   color: var(--gold);
-  border: 1px solid var(--gold);
+  border: 1.5px solid var(--gold);
   padding: 0.75rem 2rem;
-  border-radius: 8px;
+  border-radius: 12px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  font-size: 0.9375rem;
 }
 
 .ora-btn-secondary:hover {
   background: var(--gold);
   color: var(--white);
-  transform: translateY(-1px);
+  box-shadow: 0 4px 20px var(--gold-glow);
+  transform: translateY(-2px);
+}
+
+.ora-btn-secondary:active {
+  transform: translateY(0);
 }
 
 .ora-btn-gold {
   background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 100%);
   color: var(--white);
   padding: 0.75rem 2rem;
-  border-radius: 8px;
+  border-radius: 12px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  font-size: 0.9375rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .ora-btn-gold:hover {
-  box-shadow: 0 4px 20px var(--gold-glow);
-  transform: translateY(-1px);
+  box-shadow: 0 6px 24px var(--gold-glow);
+  transform: translateY(-2px);
 }
 
+.ora-btn-gold:active {
+  transform: translateY(0);
+}
+
+.ora-btn-sm {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.8125rem;
+  border-radius: 10px;
+}
+
+.ora-btn-lg {
+  padding: 1rem 2.5rem;
+  font-size: 1.0625rem;
+  border-radius: 14px;
+}
+
+/* ─── Inputs ─── */
 .ora-input {
   background: var(--white);
-  border: 1px solid var(--light-gray);
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--light-gray);
+  border-radius: 12px;
+  padding: 0.875rem 1.25rem;
   font-family: 'Cairo', sans-serif;
-  transition: all 0.3s ease;
+  font-size: 0.9375rem;
+  transition: all 0.25s ease;
   width: 100%;
   color: var(--rich-black);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.ora-input:hover {
+  border-color: var(--gold-light);
+  background: var(--champagne);
 }
 
 .ora-input:focus {
   outline: none;
   border-color: var(--gold);
-  box-shadow: 0 0 0 3px var(--gold-glow);
+  background: var(--white);
+  box-shadow: 0 0 0 4px var(--gold-glow), 0 2px 12px rgba(201,169,110,0.08);
 }
 
 .ora-input::placeholder {
   color: var(--warm-gray);
+  opacity: 0.7;
+}
+
+.ora-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--ivory-dark);
+}
+
+.ora-input-sm {
+  padding: 0.625rem 1rem;
+  font-size: 0.8125rem;
+  border-radius: 10px;
+}
+
+.ora-input-lg {
+  padding: 1.125rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 14px;
+}
+
+/* ─── Textarea ─── */
+.ora-textarea {
+  background: var(--white);
+  border: 1.5px solid var(--light-gray);
+  border-radius: 12px;
+  padding: 0.875rem 1.25rem;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.9375rem;
+  transition: all 0.25s ease;
+  width: 100%;
+  color: var(--rich-black);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.ora-textarea:hover {
+  border-color: var(--gold-light);
+  background: var(--champagne);
+}
+
+.ora-textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: var(--white);
+  box-shadow: 0 0 0 4px var(--gold-glow), 0 2px 12px rgba(201,169,110,0.08);
+}
+
+.ora-textarea::placeholder {
+  color: var(--warm-gray);
+  opacity: 0.7;
+}
+
+.ora-textarea-sm {
+  padding: 0.625rem 1rem;
+  font-size: 0.8125rem;
+  border-radius: 10px;
+  min-height: 80px;
+}
+
+/* ─── Validation states ─── */
+.ora-input-error {
+  border-color: var(--error) !important;
+}
+.ora-input-error:focus {
+  box-shadow: 0 0 0 4px var(--error-bg), 0 2px 12px rgba(220,38,38,0.06) !important;
+}
+.ora-input-success {
+  border-color: var(--success) !important;
+}
+.ora-input-success:focus {
+  box-shadow: 0 0 0 4px var(--success-bg), 0 2px 12px rgba(22,163,74,0.06) !important;
+}
+.ora-input-warning {
+  border-color: var(--warning) !important;
+}
+.ora-input-warning:focus {
+  box-shadow: 0 0 0 4px var(--warning-bg), 0 2px 12px rgba(202,138,4,0.06) !important;
+}
+
+/* ─── Labels ─── */
+.ora-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--rich-black);
+}
+
+/* ─── Search input ─── */
+.ora-search {
+  background: var(--ivory);
+  border: none;
+  border-radius: 14px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.9375rem;
+  transition: all 0.25s ease;
+  width: 100%;
+  color: var(--rich-black);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.ora-search:hover {
+  background: var(--champagne);
+}
+
+.ora-search:focus {
+  outline: none;
+  background: var(--white);
+  box-shadow: 0 0 0 4px var(--gold-glow), 0 2px 12px rgba(201,169,110,0.08);
+}
+
+.ora-search::placeholder {
+  color: var(--warm-gray);
+  opacity: 0.7;
+}
+
+/* ─── Custom checkbox ─── */
+.ora-checkbox {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 6px;
+  border: 2px solid var(--light-gray);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+  background: var(--white);
+}
+
+.ora-checkbox:hover {
+  border-color: var(--gold-light);
+}
+
+.ora-checkbox.checked {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.ora-checkbox-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  color: var(--white);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.ora-checkbox.checked .ora-checkbox-icon {
+  opacity: 1;
+}
+
+.ora-checkbox-sm {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 5px;
+}
+
+.ora-checkbox-sm .ora-checkbox-icon {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+
+/* ─── Custom radio ─── */
+.ora-radio {
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: 50%;
+  border: 2px solid var(--light-gray);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+  background: var(--white);
+}
+
+.ora-radio:hover {
+  border-color: var(--gold-light);
+}
+
+.ora-radio.checked {
+  border-color: var(--gold);
+}
+
+.ora-radio-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.ora-radio.checked .ora-radio-dot {
+  opacity: 1;
+}
+
+/* ─── Toggle switch ─── */
+.ora-switch {
+  position: relative;
+  width: 2.75rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  background: var(--light-gray);
+  transition: all 0.25s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.ora-switch.active {
+  background: var(--gold);
+}
+
+.ora-switch-knob {
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  transition: all 0.25s ease;
+}
+
+.ora-switch.active .ora-switch-knob {
+  left: calc(100% - 1.3125rem);
+}
+
+/* ─── Quantity selector ─── */
+.ora-quantity {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid var(--light-gray);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--white);
+}
+
+.ora-quantity-btn {
+  padding: 0.5rem 0.75rem;
+  color: var(--warm-gray);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  font-family: 'Cairo', sans-serif;
+}
+
+.ora-quantity-btn:hover {
+  color: var(--gold);
+  background: var(--ivory);
+}
+
+.ora-quantity-btn:active {
+  background: var(--cream);
+}
+
+.ora-quantity-value {
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  min-width: 2.5rem;
+  text-align: center;
+  border-left: 1.5px solid var(--light-gray);
+  border-right: 1.5px solid var(--light-gray);
+  color: var(--rich-black);
+  background: var(--white);
+}
+
+/* ─── Select trigger (for custom Select component) ─── */
+.ora-select-trigger {
+  background: var(--white);
+  border: 1.5px solid var(--light-gray);
+  border-radius: 12px;
+  padding: 0.875rem 1.25rem;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.9375rem;
+  color: var(--rich-black);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  -webkit-appearance: none;
+  appearance: none;
+  text-align: right;
+}
+
+.ora-select-trigger:hover {
+  border-color: var(--gold-light);
+  background: var(--champagne);
+}
+
+.ora-select-trigger:focus,
+.ora-select-trigger.open {
+  outline: none;
+  border-color: var(--gold);
+  background: var(--white);
+  box-shadow: 0 0 0 4px var(--gold-glow), 0 2px 12px rgba(201,169,110,0.08);
+}
+
+.ora-select-trigger.placeholder {
+  color: var(--warm-gray);
+  opacity: 0.7;
+}
+
+.ora-select-trigger .arrow {
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.ora-select-trigger.open .arrow {
+  transform: rotate(180deg);
+}
+
+/* ─── File upload zone ─── */
+.ora-file-upload {
+  border: 2px dashed var(--light-gray);
+  border-radius: 14px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  background: var(--white);
+}
+
+.ora-file-upload:hover {
+  border-color: var(--gold-light);
+  background: var(--champagne);
+}
+
+.ora-file-upload.dragging {
+  border-color: var(--gold);
+  background: rgba(201, 169, 110, 0.04);
+  box-shadow: 0 0 0 4px var(--gold-glow);
+}
+
+.ora-file-upload-icon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--warm-gray);
+  margin-bottom: 0.75rem;
+}
+
+.ora-file-upload.dragging .ora-file-upload-icon {
+  color: var(--gold);
+}
+
+.ora-file-upload-text {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--rich-black);
+  margin-bottom: 0.25rem;
+}
+
+.ora-file-upload-hint {
+  font-size: 0.8125rem;
+  color: var(--warm-gray);
+}
+
+.ora-file-upload-formats {
+  font-size: 0.6875rem;
+  color: var(--warm-gray);
+  opacity: 0.7;
+  margin-top: 0.5rem;
+}
+
+/* ─── Upload preview ─── */
+.ora-upload-preview {
+  position: relative;
+  background: var(--ivory-dark);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid var(--cream);
+}
+
+.ora-upload-preview img {
+  width: 100%;
+  height: 12rem;
+  object-fit: contain;
+}
+
+@media (min-width: 768px) {
+  .ora-upload-preview img {
+    height: 14rem;
+  }
+}
+
+.ora-upload-preview-actions {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ora-upload-preview-btn {
+  padding: 0.5rem;
+  background: rgba(255,255,255,0.9);
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ora-upload-preview-btn:hover {
+  background: var(--white);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
 .ora-section {

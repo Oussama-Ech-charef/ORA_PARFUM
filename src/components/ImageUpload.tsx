@@ -106,20 +106,16 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium mb-1.5">صورة المنتج</label>
+      <label className="ora-label">صورة المنتج</label>
 
       {preview ? (
-        <div className="relative bg-ivory-dark rounded-lg overflow-hidden border border-cream">
-          <img
-            src={preview}
-            alt="صورة المنتج"
-            className="w-full h-48 md:h-56 object-contain"
-          />
-          <div className="absolute top-2 left-2 flex gap-2">
+        <div className="ora-upload-preview">
+          <img src={preview} alt="صورة المنتج" />
+          <div className="ora-upload-preview-actions">
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
-              className="p-2 bg-white/90 rounded-lg shadow hover:bg-white transition-colors"
+              className="ora-upload-preview-btn"
               title="تغيير الصورة"
             >
               <FiImage className="w-4 h-4 text-rich-black" />
@@ -127,7 +123,7 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
             <button
               type="button"
               onClick={handleRemove}
-              className="p-2 bg-white/90 rounded-lg shadow hover:bg-white transition-colors"
+              className="ora-upload-preview-btn"
               title="حذف الصورة"
             >
               <FiX className="w-4 h-4 text-error" />
@@ -140,29 +136,21 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`border-2 border-dashed rounded-lg p-6 md:p-8 text-center cursor-pointer transition-all duration-200 ${
-            isDragging
-              ? 'border-gold bg-gold/5'
-              : 'border-light-gray hover:border-gold hover:bg-ivory'
-          }`}
+          className={`ora-file-upload ${isDragging ? 'dragging' : ''}`}
         >
           <div className="flex flex-col items-center gap-3">
-            <div className={`p-3 rounded-full ${isDragging ? 'bg-gold/10' : 'bg-ivory-dark'}`}>
+            <div>
               {uploading ? (
-                <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+                <div className="w-12 h-12 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto" />
               ) : (
-                <FiUpload className="w-8 h-8 text-warm-gray" />
+                <FiUpload className="ora-file-upload-icon" />
               )}
             </div>
-            <div>
-              <p className="font-medium text-sm text-rich-black">
-                {uploading ? 'جاري الرفع...' : 'اضغط لاختيار صورة'}
-              </p>
-              <p className="text-xs text-warm-gray mt-1">
-                أو اسحب وأفلت الصورة هنا
-              </p>
-            </div>
-            <p className="text-[10px] text-warm-gray">JPG, PNG, WEBP - حد أقصى 10 MB</p>
+            <p className="ora-file-upload-text">
+              {uploading ? 'جاري الرفع...' : 'اضغط لاختيار صورة'}
+            </p>
+            <p className="ora-file-upload-hint">أو اسحب وأفلت الصورة هنا</p>
+            <p className="ora-file-upload-formats">JPG, PNG, WEBP - حد أقصى 10 MB</p>
           </div>
         </div>
       )}
