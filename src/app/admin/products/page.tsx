@@ -51,13 +51,14 @@ export default function AdminProductsPage() {
       </div>
 
       <div className="relative">
-        <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-warm-gray" />
+        <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-warm-gray w-5 h-5" />
         <input
           type="text"
           placeholder="بحث عن منتج..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="ora-input pr-12"
+          className="ora-input"
+          style={{ paddingRight: '3rem' }}
         />
       </div>
 

@@ -46,14 +46,15 @@ export default function AdminOrdersPage() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
-        <div className="relative flex-1">
-          <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-warm-gray" />
+        <div className="relative flex-1 min-w-0">
+          <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-warm-gray w-5 h-5" />
           <input
             type="text"
             placeholder="بحث برقم الطلب..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="ora-input pr-12"
+            className="ora-input"
+            style={{ paddingRight: '3rem' }}
           />
         </div>
         <Select
