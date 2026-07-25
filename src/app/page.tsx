@@ -160,7 +160,7 @@ export default function Home() {
 
       <section className="ora-section bg-black text-white">
         <div className="ora-container text-center">
-          <h2 className="section-title text-white">قصة ORA PARFUM</h2>
+          <h2 className="section-title" style={{ color: 'var(--gold)' }}>قصة ORA PARFUM</h2>
           <div className="w-16 h-0.5 bg-gold mx-auto mb-6" />
           <p className="text-warm-gray max-w-3xl mx-auto leading-relaxed mb-8">
             ORA PARFUM هي علامة تجارية مغربية فاخرة للعطور، تأسست بشغف لتقديم أفضل تجربة عطرية. 

@@ -40,10 +40,10 @@ export default function ProductCard({ product }: ProductCardProps) {
         {imgError ? (
           <div className="w-full h-full flex items-center justify-center">
             <div className="text-center">
-              <div className="w-20 h-20 rounded-full bg-gradient-dark flex items-center justify-center mx-auto mb-2">
-                <span className="text-gold text-xl font-bold">{initials}</span>
+              <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-dark flex items-center justify-center mx-auto mb-2">
+                <span className="text-gold text-lg md:text-xl font-bold">{initials}</span>
               </div>
-              <span className="text-warm-gray text-xs">ORA PARFUM</span>
+              <span className="text-warm-gray text-[10px] md:text-xs">ORA PARFUM</span>
             </div>
           </div>
         ) : (
@@ -52,46 +52,46 @@ export default function ProductCard({ product }: ProductCardProps) {
             alt={product.name}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 50vw, 25vw"
             onError={() => setImgError(true)}
           />
         )}
         {product.discount && (
-          <div className="absolute top-3 right-3 ora-badge ora-badge-discount">
+          <div className="absolute top-2 right-2 md:top-3 md:right-3 ora-badge text-[10px] md:text-xs px-1.5 py-0.5 md:px-3 md:py-1">
             -{product.discount}%
           </div>
         )}
         {product.stock <= 5 && product.stock > 0 && (
-          <div className="absolute top-3 left-3 ora-badge bg-black/80 text-white">
+          <div className="absolute top-2 left-2 md:top-3 md:left-3 ora-badge bg-black/80 text-white text-[10px] md:text-xs px-1.5 py-0.5 md:px-3 md:py-1">
             متبقي {product.stock}
           </div>
         )}
         {product.stock === 0 && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <span className="text-white font-semibold text-lg">نفذ من المخزون</span>
+            <span className="text-white font-semibold text-sm md:text-lg">نفذ من المخزون</span>
           </div>
         )}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-500" />
       </div>
 
-      <div className="p-4 space-y-2">
-        <p className="text-xs text-warm-gray uppercase tracking-wider">{product.category}</p>
-        <h3 className="font-semibold text-rich-black group-hover:text-gold transition-colors duration-300 line-clamp-1">
+      <div className="p-3 md:p-4 space-y-1.5 md:space-y-2">
+        <p className="text-[10px] md:text-xs text-warm-gray uppercase tracking-wider">{product.category}</p>
+        <h3 className="text-sm md:text-base font-semibold text-rich-black group-hover:text-gold transition-colors duration-300 line-clamp-2">
           {product.name}
         </h3>
-        <p className="text-xs text-warm-gray">{product.volume} | {product.gender}</p>
-        <div className="flex items-center gap-2">
+        <p className="text-[10px] md:text-xs text-warm-gray">{product.volume} | {product.gender}</p>
+        <div className="flex items-center gap-1.5 md:gap-2">
           {discountPrice ? (
             <>
-              <span className="text-lg font-bold text-rich-black">
+              <span className="text-base md:text-lg font-bold text-rich-black">
                 {formatPrice(discountPrice!)}
               </span>
-              <span className="text-sm text-warm-gray line-through">
+              <span className="text-xs md:text-sm text-warm-gray line-through">
                 {formatPrice(product.price)}
               </span>
             </>
           ) : (
-            <span className="text-lg font-bold text-rich-black">
+            <span className="text-base md:text-lg font-bold text-rich-black">
               {formatPrice(product.price)}
             </span>
           )}
@@ -100,7 +100,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <button
           onClick={handleAddToCart}
           disabled={product.stock === 0}
-          className={`w-full py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
+          className={`w-full py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 md:gap-2 ${
             product.stock === 0
               ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
               : added
@@ -112,7 +112,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             'تمت الإضافة ✓'
           ) : (
             <>
-              <FiShoppingCart className="w-4 h-4" />
+              <FiShoppingCart className="w-3.5 h-3.5 md:w-4 md:h-4" />
               أضف للسلة
             </>
           )}
