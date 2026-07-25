@@ -154,7 +154,7 @@ export default function CartPage() {
                         </div>
                         <button
                           onClick={(e) => { e.stopPropagation(); removeFromCart(item.product.id); }}
-                          className="p-2 text-warm-gray hover:text-red-500 transition-colors"
+                          className="p-2 text-warm-gray hover:text-error transition-colors"
                         >
                           <FiTrash2 className="w-4 h-4" />
                         </button>
@@ -202,7 +202,7 @@ export default function CartPage() {
 
               <button
                 onClick={clearCart}
-                className="text-sm text-warm-gray hover:text-red-500 transition-colors mt-4"
+                className="text-sm text-warm-gray hover:text-error transition-colors mt-4"
               >
                 تفريغ السلة
               </button>
@@ -219,7 +219,7 @@ export default function CartPage() {
                   </div>
 
                   {selectedTotals.discount > 0 && (
-                    <div className="flex justify-between text-green-600">
+                    <div className="flex justify-between text-success">
                       <span>الخصم</span>
                       <span>- {formatPrice(selectedTotals.discount)}</span>
                     </div>
@@ -234,7 +234,7 @@ export default function CartPage() {
                 </div>
 
                 {validationError && (
-                  <div className="flex items-center gap-2 text-sm text-red-500 bg-red-50 rounded-lg px-4 py-3 mt-4">
+                  <div className="flex items-center gap-2 text-sm text-error bg-error-bg rounded-lg px-4 py-3 mt-4">
                     <FiAlertCircle className="w-5 h-5 flex-shrink-0" />
                     <span>{validationError}</span>
                   </div>
@@ -244,8 +244,8 @@ export default function CartPage() {
                   onClick={handleWhatsAppCheckout}
                   className={`w-full mt-6 py-4 rounded-lg font-semibold text-lg flex items-center justify-center gap-3 transition-all duration-300 ${
                     orderPlaced
-                      ? 'bg-green-500 text-white'
-                      : 'bg-[#25D366] text-white hover:bg-[#20BD5A] hover:shadow-lg'
+                      ? 'bg-success text-white'
+                      : 'bg-whatsapp text-white hover:bg-whatsapp-dark hover:shadow-lg'
                   }`}
                 >
                   <FaWhatsapp className="w-6 h-6" />

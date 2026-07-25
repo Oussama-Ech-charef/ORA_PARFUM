@@ -237,7 +237,7 @@ export default function StorePage() {
           {/* ── FILTER PANEL (shared) ── */}
           <div className={`overflow-hidden transition-all duration-300 ${showFilters ? 'max-h-[500px] opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
             <div className="pt-4 border-t border-cream space-y-4">
-              <div className="md:hidden">
+              <div>
                 <span className="text-sm text-warm-gray font-medium block mb-2">التصنيف:</span>
                 <div className="flex flex-wrap items-center gap-2">
                   {categories.map((cat) => (
@@ -299,7 +299,7 @@ export default function StorePage() {
         </div>
       </section>
 
-      <section className="hidden md:block bg-white/80 border-b border-cream">
+      <section className="hidden bg-white/80 border-b border-cream">
         <div className="ora-container py-4">
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
             {categories.map((cat) => (

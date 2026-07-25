@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { FiX, FiMinus, FiPlus, FiTrash2, FiShoppingBag, FiAlertCircle } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
@@ -11,6 +12,7 @@ import { formatPrice } from '@/lib/format';
 import { generateOrderMessageForItems, computeItemsTotals } from '@/lib/cart';
 
 export default function CartDrawer() {
+  const router = useRouter();
   const {
     cart, itemCount, isCartDrawerOpen, closeCartDrawer,
     updateQuantity, removeFromCart, clearCart,
@@ -120,8 +122,8 @@ export default function CartDrawer() {
             <p className="text-lg font-semibold text-rich-black mb-2">السلة فارغة</p>
             <p className="text-sm text-warm-gray mb-6">لم تقم بإضافة أي منتجات بعد</p>
             <button
-              onClick={closeCartDrawer}
-              className="ora-btn-primary text-sm"
+              onClick={() => { closeCartDrawer(); router.push('/store'); }}
+              className="ora-btn-primary text-sm cursor-pointer"
             >
               تصفح المنتجات
             </button>
@@ -189,7 +191,7 @@ export default function CartDrawer() {
                         </div>
                         <button
                           onClick={(e) => { e.stopPropagation(); removeFromCart(item.product.id); }}
-                          className="p-1 text-warm-gray hover:text-red-500 transition-colors flex-shrink-0"
+                          className="p-1 text-warm-gray hover:text-error transition-colors flex-shrink-0"
                         >
                           <FiTrash2 className="w-3.5 h-3.5" />
                         </button>
@@ -224,7 +226,7 @@ export default function CartDrawer() {
 
               <button
                 onClick={clearCart}
-                className="text-xs text-warm-gray hover:text-red-500 transition-colors"
+                className="text-xs text-warm-gray hover:text-error transition-colors"
               >
                 تفريغ السلة
               </button>
@@ -237,7 +239,7 @@ export default function CartDrawer() {
                   <span className="font-semibold">{formatPrice(selectedTotals.subtotal)}</span>
                 </div>
                 {selectedTotals.discount > 0 && (
-                  <div className="flex justify-between text-green-600">
+                  <div className="flex justify-between text-success">
                     <span>الخصم</span>
                     <span>- {formatPrice(selectedTotals.discount)}</span>
                   </div>
@@ -251,7 +253,7 @@ export default function CartDrawer() {
               </div>
 
               {validationError && (
-                <div className="flex items-center gap-2 text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2">
+                <div className="flex items-center gap-2 text-xs text-error bg-error-bg rounded-lg px-3 py-2">
                   <FiAlertCircle className="w-4 h-4 flex-shrink-0" />
                   <span>{validationError}</span>
                 </div>
@@ -261,8 +263,8 @@ export default function CartDrawer() {
                 onClick={handleWhatsAppCheckout}
                 className={`w-full py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2.5 transition-all duration-300 ${
                   orderPlaced
-                    ? 'bg-green-500 text-white'
-                    : 'bg-[#25D366] text-white hover:bg-[#20BD5A] hover:shadow-lg'
+                    ? 'bg-success text-white'
+                    : 'bg-whatsapp text-white hover:bg-whatsapp-dark hover:shadow-lg'
                 }`}
               >
                 <FaWhatsapp className="w-5 h-5" />

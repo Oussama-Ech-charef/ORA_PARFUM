@@ -16,7 +16,7 @@ export default function Footer() {
   const social = defaultSettings;
 
   return (
-    <footer className="bg-[#0d0d0d] text-white">
+    <footer className="bg-black text-white">
       <div className="ora-container py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
           <div className="space-y-4">

@@ -116,7 +116,7 @@ export default function ContactPage() {
                     href={getInquiryWhatsAppUrl()}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white hover:bg-[#20BD5A] transition-all hover:shadow-lg"
+                    className="w-12 h-12 rounded-full bg-whatsapp flex items-center justify-center text-white hover:bg-whatsapp-dark transition-all hover:shadow-lg"
                   >
                     <FaWhatsapp className="w-5 h-5" />
                   </a>

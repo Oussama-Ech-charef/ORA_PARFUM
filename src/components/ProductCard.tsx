@@ -57,7 +57,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
         )}
         {product.discount && (
-          <div className="absolute top-2 right-2 md:top-3 md:right-3 ora-badge text-[10px] md:text-xs px-1.5 py-0.5 md:px-3 md:py-1">
+          <div className="absolute top-2 right-2 md:top-3 md:right-3 ora-badge ora-badge-discount text-[10px] md:text-xs px-1.5 py-0.5 md:px-3 md:py-1 z-10">
             -{product.discount}%
           </div>
         )}
@@ -102,9 +102,9 @@ export default function ProductCard({ product }: ProductCardProps) {
           disabled={product.stock === 0}
           className={`w-full py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 md:gap-2 ${
             product.stock === 0
-              ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              ? 'bg-light-gray/50 text-warm-gray/50 cursor-not-allowed'
               : added
-              ? 'bg-green-500 text-white'
+              ? 'bg-success text-white'
               : 'bg-rich-black text-white hover:bg-black'
           }`}
         >

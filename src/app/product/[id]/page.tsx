@@ -157,7 +157,7 @@ export default function ProductPage() {
                 <span className="text-warm-gray">|</span>
                 <span className="text-warm-gray">
                   المخزون:{' '}
-                  <strong className={product.stock > 5 ? 'text-green-600' : 'text-red-500'}>
+                  <strong className={product.stock > 5 ? 'text-success' : 'text-error'}>
                     {product.stock > 0 ? `${product.stock} قطعة` : 'نفذ'}
                   </strong>
                 </span>
@@ -200,9 +200,9 @@ export default function ProductPage() {
                   disabled={product.stock === 0}
                   className={`flex-1 py-4 rounded-lg font-semibold text-lg flex items-center justify-center gap-3 transition-all duration-300 ${
                     product.stock === 0
-                      ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                      ? 'bg-light-gray/50 text-warm-gray/50 cursor-not-allowed'
                       : added
-                      ? 'bg-green-500 text-white'
+                      ? 'bg-success text-white'
                       : 'bg-rich-black text-white hover:bg-black'
                   }`}
                 >
@@ -223,10 +223,10 @@ export default function ProductPage() {
                   disabled={product.stock === 0}
                   className={`flex-1 py-4 rounded-lg font-semibold text-lg flex items-center justify-center gap-3 transition-all duration-300 ${
                     product.stock === 0
-                      ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+? 'bg-light-gray/50 text-warm-gray/50 cursor-not-allowed'
                       : orderSent
-                      ? 'bg-green-500 text-white'
-                      : 'bg-[#25D366] text-white hover:bg-[#20BD5A] hover:shadow-lg'
+                      ? 'bg-success text-white'
+                      : 'bg-whatsapp text-white hover:bg-whatsapp-dark hover:shadow-lg'
                   }`}
                 >
                   <FaWhatsapp className="w-5 h-5" />
@@ -236,15 +236,15 @@ export default function ProductPage() {
 
               <div className="flex items-center gap-4 text-sm text-warm-gray pt-2">
                 <div className="flex items-center gap-1.5">
-                  <FiCheck className="text-green-500 w-4 h-4" />
+                  <FiCheck className="text-success w-4 h-4" />
                   منتج أصلي
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <FiCheck className="text-green-500 w-4 h-4" />
+                  <FiCheck className="text-success w-4 h-4" />
                   توصيل سريع
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <FiCheck className="text-green-500 w-4 h-4" />
+                  <FiCheck className="text-success w-4 h-4" />
                   ضمان الجودة
                 </div>
               </div>
