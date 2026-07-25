@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { defaultSettings } from '@/data/settings';
 import { FiSave } from 'react-icons/fi';
 import { SiteSettings } from '@/types';
@@ -15,8 +15,12 @@ function getSavedSettings(): SiteSettings {
 }
 
 export default function AdminSettingsPage() {
-  const [form, setForm] = useState(getSavedSettings);
+  const [form, setForm] = useState(defaultSettings);
   const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    setForm(getSavedSettings());
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -42,16 +46,16 @@ export default function AdminSettingsPage() {
           <h2 className="text-lg font-semibold mb-4 pb-2 border-b border-cream">معلومات المتجر</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1.5">اسم المتجر</label>
+              <label className="ora-label">اسم المتجر</label>
               <input name="storeName" value={form.storeName} onChange={handleChange} className="ora-input" />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1.5">رقم واتساب</label>
+              <label className="ora-label">رقم واتساب</label>
                <input name="whatsappNumber" value={form.whatsappNumber} onChange={handleChange} className="ora-input" dir="ltr" placeholder="212639860777" />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium mb-1.5">وصف المتجر</label>
-              <textarea name="storeDescription" value={form.storeDescription} onChange={handleChange} className="ora-input" />
+              <label className="ora-label">وصف المتجر</label>
+              <textarea name="storeDescription" value={form.storeDescription} onChange={handleChange} className="ora-textarea" />
             </div>
           </div>
         </div>
@@ -60,15 +64,15 @@ export default function AdminSettingsPage() {
           <h2 className="text-lg font-semibold mb-4 pb-2 border-b border-cream">معلومات الاتصال</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1.5">رقم الهاتف</label>
+              <label className="ora-label">رقم الهاتف</label>
               <input name="contactPhone" value={form.contactPhone} onChange={handleChange} className="ora-input" dir="ltr" />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1.5">البريد الإلكتروني</label>
+              <label className="ora-label">البريد الإلكتروني</label>
               <input name="contactEmail" value={form.contactEmail} onChange={handleChange} className="ora-input" dir="ltr" />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium mb-1.5">العنوان</label>
+              <label className="ora-label">العنوان</label>
               <input name="address" value={form.address} onChange={handleChange} className="ora-input" />
             </div>
           </div>
@@ -78,15 +82,15 @@ export default function AdminSettingsPage() {
           <h2 className="text-lg font-semibold mb-4 pb-2 border-b border-cream">روابط التواصل الاجتماعي</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1.5">انستغرام</label>
+              <label className="ora-label">انستغرام</label>
               <input name="instagram" value={form.instagram} onChange={handleChange} className="ora-input" dir="ltr" />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1.5">فيسبوك</label>
+              <label className="ora-label">فيسبوك</label>
               <input name="facebook" value={form.facebook} onChange={handleChange} className="ora-input" dir="ltr" />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1.5">تيك توك</label>
+              <label className="ora-label">تيك توك</label>
               <input name="tiktok" value={form.tiktok} onChange={handleChange} className="ora-input" dir="ltr" />
             </div>
           </div>
@@ -95,15 +99,17 @@ export default function AdminSettingsPage() {
         <div>
           <h2 className="text-lg font-semibold mb-4 pb-2 border-b border-cream">معلومات التوصيل</h2>
           <div>
-            <label className="block text-sm font-medium mb-1.5">معلومات التوصيل</label>
-            <textarea name="deliveryInfo" value={form.deliveryInfo} onChange={handleChange} className="ora-input" />
+            <label className="ora-label">معلومات التوصيل</label>
+            <textarea name="deliveryInfo" value={form.deliveryInfo} onChange={handleChange} className="ora-textarea" />
           </div>
         </div>
 
         <button
           type="submit"
-          className={`px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-all ${
-            saved ? 'bg-success text-white' : 'bg-rich-black text-white hover:bg-black'
+          className={`w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all ${
+            saved
+              ? 'bg-success text-white'
+              : 'ora-btn-primary'
           }`}
         >
           <FiSave className="w-4 h-4" />

@@ -57,7 +57,7 @@ export default function AdminLoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1.5">اسم المستخدم</label>
+              <label className="ora-label">اسم المستخدم</label>
               <input
                 type="text"
                 value={username}
@@ -68,7 +68,7 @@ export default function AdminLoginPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1.5">كلمة المرور</label>
+              <label className="ora-label">كلمة المرور</label>
               <input
                 type="password"
                 value={password}

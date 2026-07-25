@@ -7,6 +7,11 @@ import { FiSearch, FiChevronDown } from 'react-icons/fi';
 import { formatPrice } from '@/lib/format';
 import Select from '@/components/Select';
 
+function formatDate(dateStr: string): string {
+  const [y, m, d] = dateStr.split('T')[0].split('-');
+  return `${d}/${m}/${y}`;
+}
+
 const statuses: OrderStatus[] = ['جديد', 'قيد المعالجة', 'تم التأكيد', 'تم الشحن', 'مكتمل', 'ملغى'];
 const statusColors: Record<string, string> = {
   'جديد': 'ora-badge-status-new',
@@ -89,7 +94,7 @@ export default function AdminOrdersPage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-xs text-warm-gray">
-                    {new Date(order.createdAt).toLocaleDateString('ar-MA')}
+                    {formatDate(order.createdAt)}
                   </span>
                   <FiChevronDown className={`w-4 h-4 text-warm-gray transition-transform ${expandedOrder === order.id ? 'rotate-180' : ''}`} />
                 </div>

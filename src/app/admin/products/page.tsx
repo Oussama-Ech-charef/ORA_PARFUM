@@ -43,7 +43,7 @@ export default function AdminProductsPage() {
       </div>
         <Link
           href="/admin/products/new"
-          className="bg-rich-black text-white px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-black transition-colors flex items-center justify-center gap-2 self-start sm:self-auto"
+          className="ora-btn-primary ora-btn-sm flex items-center justify-center gap-2 self-start sm:self-auto"
         >
           <FiPlus className="w-4 h-4" />
           إضافة منتج

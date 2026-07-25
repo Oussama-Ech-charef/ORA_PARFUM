@@ -6,6 +6,11 @@ import { Order, OrderStatus } from '@/types';
 import { FiMessageSquare, FiCheck, FiX } from 'react-icons/fi';
 import { formatPrice } from '@/lib/format';
 
+function formatDate(dateStr: string): string {
+  const [y, m, d] = dateStr.split('T')[0].split('-');
+  return `${d}/${m}/${y}`;
+}
+
 const statusColors: Record<string, string> = {
   'جديد': 'ora-badge-status-new',
   'قيد المعالجة': 'ora-badge-status-processing',
@@ -57,7 +62,7 @@ export default function AdminMessagesPage() {
                 </div>
                 <div className="flex items-center gap-2 mr-5 sm:mr-0">
                   <span className="text-sm font-semibold">{formatPrice(order.total)}</span>
-                  <span className="text-xs text-warm-gray">{new Date(order.createdAt).toLocaleDateString('ar-MA')}</span>
+                  <span className="text-xs text-warm-gray">{formatDate(order.createdAt)}</span>
                 </div>
               </div>
 

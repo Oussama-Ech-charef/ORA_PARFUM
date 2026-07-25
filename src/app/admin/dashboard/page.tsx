@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getProducts } from '@/lib/products';
+import { products as seedProducts } from '@/data/products';
 import { getOrders } from '@/lib/orders';
 import { Order } from '@/types';
 import { FiPackage, FiShoppingBag, FiDollarSign, FiAlertTriangle } from 'react-icons/fi';
@@ -17,12 +18,19 @@ const statusBadgeClass: Record<OrderStatus, string> = {
 };
 import { formatPrice } from '@/lib/format';
 
+function formatDate(dateStr: string): string {
+  const [y, m, d] = dateStr.split('T')[0].split('-');
+  return `${d}/${m}/${y}`;
+}
+
 export default function AdminDashboard() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [allProducts, setAllProducts] = useState([...seedProducts]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setOrders(getOrders());
+    setAllProducts(getProducts());
     setLoading(false);
   }, []);
 
@@ -34,7 +42,7 @@ export default function AdminDashboard() {
     );
   }
 
-  const allProducts = getProducts();
+
   const activeProducts = allProducts.filter((p) => p.active);
   const newOrders = orders.filter((o) => o.status === 'جديد');
   const completedOrders = orders.filter((o) => o.status === 'مكتمل');
@@ -143,7 +151,7 @@ export default function AdminDashboard() {
                         </span>
                       </td>
                       <td className="py-3 px-2 text-warm-gray">
-                        {new Date(order.createdAt).toLocaleDateString('ar-MA')}
+                        {formatDate(order.createdAt)}
                       </td>
                     </tr>
                   ))}
@@ -165,7 +173,7 @@ export default function AdminDashboard() {
                     <span className="font-semibold">{formatPrice(order.total)}</span>
                   </div>
                   <p className="text-xs text-warm-gray mt-1">
-                    {new Date(order.createdAt).toLocaleDateString('ar-MA')}
+                    {formatDate(order.createdAt)}
                   </p>
                 </div>
               ))}
