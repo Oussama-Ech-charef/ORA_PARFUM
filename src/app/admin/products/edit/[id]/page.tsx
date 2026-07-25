@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { FiArrowRight } from 'react-icons/fi';
 import { getProductById, updateProduct } from '@/lib/products';
 import Select from '@/components/Select';
+import ImageUpload from '@/components/ImageUpload';
 
 export default function EditProductPage() {
   const router = useRouter();
@@ -139,8 +140,10 @@ export default function EditProductPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1.5">رابط الصورة</label>
-          <input name="image" value={form.image} onChange={handleChange} className="ora-input" dir="ltr" placeholder="/images/products/..." />
+          <ImageUpload
+            value={form.image || undefined}
+            onChange={(url) => setForm((prev) => ({ ...prev, image: url || '' }))}
+          />
         </div>
 
         <button type="submit" className="ora-btn-primary w-full">
