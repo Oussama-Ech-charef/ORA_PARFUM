@@ -258,7 +258,7 @@ export default function ProductPage() {
           <div className="ora-container">
             <h2 className="section-title">منتجات مشابهة</h2>
             <p className="section-subtitle">قد تعجبك أيضاً</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}

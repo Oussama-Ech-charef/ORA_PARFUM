@@ -79,7 +79,7 @@ export default function Home() {
             <h2 className="section-title">تشكيلتنا المميزة</h2>
             <p className="section-subtitle">اختر عطرك المفضل من بين مجموعتنا الفاخرة</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredProducts.map((product, index) => (
               <div
                 key={product.id}
@@ -109,7 +109,7 @@ export default function Home() {
               <h2 className="section-title">عروض خاصة</h2>
               <p className="section-subtitle">تخفيضات مميزة على تشكيلة مختارة من العطور</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
               {discountedProducts.map((product, index) => (
                 <div
                   key={product.id}
@@ -179,7 +179,7 @@ export default function Home() {
             <h2 className="section-title">جديدنا</h2>
             <p className="section-subtitle">أحدث إصداراتنا من العطور الفاخرة</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {newProducts.map((product, index) => (
               <div
                 key={product.id}
