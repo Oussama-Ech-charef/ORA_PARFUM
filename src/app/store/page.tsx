@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { getProducts } from '@/lib/products';
-import { categories, genders } from '@/data/products';
+import { products as seedProducts, categories, genders } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
 import { FiSearch, FiSliders, FiChevronDown, FiX } from 'react-icons/fi';
 
@@ -34,7 +34,10 @@ export default function StorePage() {
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
 
-  const products = getProducts();
+  const [products, setProducts] = useState([...seedProducts]);
+  useEffect(() => {
+    setProducts(getProducts());
+  }, []);
   let filtered = products.filter((p) => p.active);
 
   if (search) {
@@ -93,8 +96,7 @@ export default function StorePage() {
                 placeholder="ابحث عن عطر..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-14 pr-14 pl-5 bg-ivory border-0 rounded-xl text-rich-black placeholder:text-warm-gray/60 text-base transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:bg-white"
-                style={{ fontFamily: "'Cairo', sans-serif" }}
+                className="ora-search h-14 pr-14 pl-5 text-base"
               />
             </div>
 
@@ -166,8 +168,7 @@ export default function StorePage() {
                 placeholder="ابحث عن عطر..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-10 md:h-12 pr-10 md:pr-14 pl-3 md:pl-5 bg-ivory border-0 rounded-xl text-rich-black placeholder:text-warm-gray/60 text-sm md:text-base transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:bg-white"
-                style={{ fontFamily: "'Cairo', sans-serif" }}
+                className="ora-search h-10 md:h-12 pr-12 md:pr-14 pl-3 md:pl-5 text-sm md:text-base"
               />
             </div>
 

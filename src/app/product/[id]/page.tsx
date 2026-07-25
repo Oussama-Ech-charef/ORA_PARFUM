@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { getProducts } from '@/lib/products';
+import { products as seedProducts } from '@/data/products';
 import { useCart } from '@/context/CartContext';
 import ProductCard from '@/components/ProductCard';
 import { FiShoppingCart, FiMinus, FiPlus, FiCheck } from 'react-icons/fi';
@@ -16,7 +17,10 @@ import { generateOrderId } from '@/lib/orders';
 export default function ProductPage() {
   const params = useParams();
   const { addToCart, cart } = useCart();
-  const products = getProducts();
+  const [products, setProducts] = useState([...seedProducts]);
+  useEffect(() => {
+    setProducts(getProducts());
+  }, []);
   const product = products.find((p) => p.slug === params.id);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
@@ -175,18 +179,18 @@ export default function ProductPage() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="flex items-center border border-light-gray rounded-lg">
+                <div className="ora-quantity">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="p-3 hover:text-gold transition-colors"
+                    className="ora-quantity-btn"
                     disabled={quantity <= 1}
                   >
                     <FiMinus className="w-4 h-4" />
                   </button>
-                  <span className="px-6 py-3 font-semibold min-w-[3rem] text-center">{quantity}</span>
+                  <span className="ora-quantity-value">{quantity}</span>
                   <button
                     onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                    className="p-3 hover:text-gold transition-colors"
+                    className="ora-quantity-btn"
                     disabled={quantity >= product.stock}
                   >
                     <FiPlus className="w-4 h-4" />

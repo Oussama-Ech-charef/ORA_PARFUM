@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FiInstagram, FiFacebook, FiPhone, FiMail, FiMapPin } from 'react-icons/fi';
@@ -9,6 +10,11 @@ import { SITE_CONFIG } from '@/lib/config';
 import { defaultSettings } from '@/data/settings';
 
 export default function Footer() {
+  const [year, setYear] = useState(2025);
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
+
   const pathname = usePathname();
   const isAdmin = pathname.startsWith('/admin');
   if (isAdmin) return null;
@@ -108,7 +114,7 @@ export default function Footer() {
 
         <div className="mt-10 md:mt-12 pt-8 border-t border-white/10 text-center">
           <p className="text-white/40 text-sm">
-            © {new Date().getFullYear()} ORA PARFUM. جميع الحقوق محفوظة.
+            © {year} ORA PARFUM. جميع الحقوق محفوظة.
           </p>
         </div>
       </div>

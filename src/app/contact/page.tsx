@@ -128,22 +128,22 @@ export default function ContactPage() {
               <h2 className="text-2xl font-bold mb-6">أرسل لنا رسالة</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">الاسم</label>
+                  <label className="ora-label">الاسم</label>
                   <input type="text" name="name" className="ora-input" placeholder="اسمك الكريم" required />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">البريد الإلكتروني</label>
+                  <label className="ora-label">البريد الإلكتروني</label>
                   <input type="email" name="email" className="ora-input" placeholder="بريدك الإلكتروني" required />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">رقم الهاتف</label>
+                  <label className="ora-label">رقم الهاتف</label>
                   <input type="tel" name="phone" className="ora-input" placeholder="رقم هاتفك" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1.5">الرسالة</label>
+                  <label className="ora-label">الرسالة</label>
                   <textarea
                     name="message"
-                    className="ora-input min-h-[120px] resize-none"
+                    className="ora-textarea"
                     placeholder="اكتب رسالتك هنا..."
                     required
                   />

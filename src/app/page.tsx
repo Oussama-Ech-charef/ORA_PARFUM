@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getProducts } from '@/lib/products';
+import { products as seedProducts } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
 import { FiChevronDown, FiStar, FiShield, FiTruck, FiArrowLeft } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
@@ -12,7 +13,10 @@ import { getInquiryWhatsAppUrl } from '@/lib/config';
 export default function Home() {
   const [heroLoaded, setHeroLoaded] = useState(false);
 
-  const allProducts = getProducts();
+  const [allProducts, setAllProducts] = useState([...seedProducts]);
+  useEffect(() => {
+    setAllProducts(getProducts());
+  }, []);
   const featuredProducts = allProducts.filter((p) => p.active).slice(0, 4);
   const discountedProducts = allProducts.filter((p) => p.discount && p.active);
   const newProducts = [...allProducts].filter((p) => p.active).slice(0, 4);

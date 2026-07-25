@@ -160,15 +160,11 @@ export default function CartDrawer() {
                   >
                     <div className="flex items-center">
                       <div
-                        className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all duration-200 ${
-                          isSelected ? 'border-gold bg-gold' : 'border-warm-gray bg-white'
-                        }`}
+                        className={`ora-checkbox ora-checkbox-sm ${isSelected ? 'checked' : ''}`}
                       >
-                        {isSelected && (
-                          <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
-                        )}
+                        <svg className="ora-checkbox-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
                       </div>
                     </div>
 
@@ -198,17 +194,17 @@ export default function CartDrawer() {
                       </div>
 
                       <div className="flex items-center justify-between mt-2">
-                        <div className="flex items-center border border-light-gray rounded-lg bg-white">
+                        <div className="ora-quantity">
                           <button
                             onClick={(e) => { e.stopPropagation(); updateQuantity(item.product.id, item.quantity - 1); }}
-                            className="p-1.5 hover:text-gold transition-colors"
+                            className="ora-quantity-btn"
                           >
                             <FiMinus className="w-3 h-3" />
                           </button>
-                          <span className="px-3 py-1.5 font-semibold text-xs min-w-[1.5rem] text-center">{item.quantity}</span>
+                          <span className="ora-quantity-value">{item.quantity}</span>
                           <button
                             onClick={(e) => { e.stopPropagation(); updateQuantity(item.product.id, item.quantity + 1); }}
-                            className="p-1.5 hover:text-gold transition-colors"
+                            className="ora-quantity-btn"
                             disabled={item.quantity >= item.product.stock}
                           >
                             <FiPlus className="w-3 h-3" />
