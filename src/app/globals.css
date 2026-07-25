@@ -2,6 +2,7 @@
 @import "tailwindcss";
 
 :root {
+  /* ─── Core brand palette ─── */
   --background: #faf8f5;
   --foreground: #1a1a1a;
   --black: #0d0d0d;
@@ -19,6 +20,30 @@
   --light-gray: #d4cfc9;
   --white: #ffffff;
   --black-soft: #2a2a2a;
+
+  /* ─── Semantic / functional ─── */
+  --whatsapp: #25D366;
+  --whatsapp-dark: #20BD5A;
+  --success: #16a34a;
+  --success-bg: #dcfce7;
+  --error: #dc2626;
+  --error-bg: #fee2e2;
+  --warning: #ca8a04;
+  --warning-bg: #fef9c3;
+
+  /* ─── Admin status badges ─── */
+  --status-new: #2563eb;
+  --status-new-bg: #dbeafe;
+  --status-processing: #a16207;
+  --status-processing-bg: #fef9c3;
+  --status-confirmed: #7c3aed;
+  --status-confirmed-bg: #f3e8ff;
+  --status-shipped: #4338ca;
+  --status-shipped-bg: #e0e7ff;
+  --status-completed: #16a34a;
+  --status-completed-bg: #dcfce7;
+  --status-cancelled: #dc2626;
+  --status-cancelled-bg: #fee2e2;
 }
 
 @theme inline {
@@ -36,6 +61,14 @@
   --color-warm-gray: var(--warm-gray);
   --color-medium-gray: var(--medium-gray);
   --color-light-gray: var(--light-gray);
+  --color-whatsapp: var(--whatsapp);
+  --color-whatsapp-dark: var(--whatsapp-dark);
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-error: var(--error);
+  --color-error-bg: var(--error-bg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
   --font-sans: 'Cairo', sans-serif;
 }
 
@@ -239,6 +272,16 @@ html {
   background: var(--black);
   color: var(--white);
 }
+
+.ora-badge-status-new { background: var(--status-new-bg); color: var(--status-new); }
+.ora-badge-status-processing { background: var(--status-processing-bg); color: var(--status-processing); }
+.ora-badge-status-confirmed { background: var(--status-confirmed-bg); color: var(--status-confirmed); }
+.ora-badge-status-shipped { background: var(--status-shipped-bg); color: var(--status-shipped); }
+.ora-badge-status-completed { background: var(--status-completed-bg); color: var(--status-completed); }
+.ora-badge-status-cancelled { background: var(--status-cancelled-bg); color: var(--status-cancelled); }
+
+.ora-badge-active { background: var(--success-bg); color: var(--success); }
+.ora-badge-inactive { background: var(--cream); color: var(--warm-gray); }
 
 .ora-divider {
   height: 1px;
