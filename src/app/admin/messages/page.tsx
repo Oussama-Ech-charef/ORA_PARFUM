@@ -7,12 +7,12 @@ import { FiMessageSquare, FiCheck, FiX } from 'react-icons/fi';
 import { formatPrice } from '@/lib/format';
 
 const statusColors: Record<string, string> = {
-  'جديد': 'bg-blue-100 text-blue-700',
-  'قيد المعالجة': 'bg-yellow-100 text-yellow-700',
-  'تم التأكيد': 'bg-purple-100 text-purple-700',
-  'تم الشحن': 'bg-indigo-100 text-indigo-700',
-  'مكتمل': 'bg-green-100 text-green-700',
-  'ملغى': 'bg-red-100 text-red-700',
+  'جديد': 'ora-badge-status-new',
+  'قيد المعالجة': 'ora-badge-status-processing',
+  'تم التأكيد': 'ora-badge-status-confirmed',
+  'تم الشحن': 'ora-badge-status-shipped',
+  'مكتمل': 'ora-badge-status-completed',
+  'ملغى': 'ora-badge-status-cancelled',
 };
 
 export default function AdminMessagesPage() {
@@ -50,7 +50,7 @@ export default function AdminMessagesPage() {
                 className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 cursor-pointer hover:bg-ivory/50 transition-colors text-right"
               >
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                  <div className={`w-2 h-2 rounded-full ${order.status === 'جديد' ? 'bg-blue-500' : 'bg-gray-300'} flex-shrink-0`} />
+                  <div className={`w-2 h-2 rounded-full flex-shrink-0 ${order.status === 'جديد' ? 'bg-gold' : 'bg-light-gray'}`} />
                   <span className="font-bold text-gold text-sm sm:text-base">#{order.id}</span>
                   <span className="text-xs sm:text-sm text-warm-gray">{order.items.length} منتج</span>
                   <span className={`ora-badge text-xs ${statusColors[order.status]}`}>{order.status}</span>
@@ -96,7 +96,7 @@ export default function AdminMessagesPage() {
                     ))}
                     <button
                       onClick={() => updateStatus(order.id, 'ملغى')}
-                      className="px-3 py-1 rounded-full text-xs font-medium bg-red-50 text-red-600 hover:bg-red-100 transition-all"
+                      className="px-3 py-1 rounded-full text-xs font-medium bg-error-bg text-error hover:bg-error-bg/80 transition-all"
                     >
                       ملغى
                     </button>

@@ -103,7 +103,7 @@ export default function AdminSettingsPage() {
         <button
           type="submit"
           className={`px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-all ${
-            saved ? 'bg-green-500 text-white' : 'bg-rich-black text-white hover:bg-black'
+            saved ? 'bg-success text-white' : 'bg-rich-black text-white hover:bg-black'
           }`}
         >
           <FiSave className="w-4 h-4" />

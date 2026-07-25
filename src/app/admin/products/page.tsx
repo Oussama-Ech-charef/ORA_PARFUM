@@ -98,11 +98,11 @@ export default function AdminProductsPage() {
                   <td className="py-3 px-4">
                     <span className="font-medium">{formatPrice(product.price)}</span>
                     {product.discount && (
-                      <span className="text-xs text-green-600 block">-{product.discount}%</span>
+                      <span className="text-xs text-success block">-{product.discount}%</span>
                     )}
                   </td>
                   <td className="py-3 px-4">
-                    <span className={product.stock <= 5 ? 'text-red-500 font-medium' : ''}>
+                    <span className={product.stock <= 5 ? 'text-error font-medium' : ''}>
                       {product.stock}
                     </span>
                   </td>
@@ -112,8 +112,8 @@ export default function AdminProductsPage() {
                       onClick={() => handleToggleActive(product.id)}
                       className={`ora-badge text-xs cursor-pointer ${
                         product.active
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-gray-100 text-gray-500'
+                          ? 'ora-badge-active'
+                          : 'ora-badge-inactive'
                       }`}
                     >
                       {product.active ? 'نشط' : 'غير نشط'}
@@ -129,7 +129,7 @@ export default function AdminProductsPage() {
                       </Link>
                       <button
                         onClick={() => handleDelete(product.id)}
-                        className="p-2 text-warm-gray hover:text-red-500 transition-colors"
+                        className="p-2 text-warm-gray hover:text-error transition-colors"
                       >
                         <FiTrash2 className="w-4 h-4" />
                       </button>
@@ -163,8 +163,8 @@ export default function AdminProductsPage() {
                   onClick={() => handleToggleActive(product.id)}
                   className={`ora-badge text-xs cursor-pointer flex-shrink-0 ${
                     product.active
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-gray-100 text-gray-500'
+                      ? 'ora-badge-active'
+                      : 'ora-badge-inactive'
                   }`}
                 >
                   {product.active ? 'نشط' : 'غير نشط'}
@@ -176,10 +176,10 @@ export default function AdminProductsPage() {
                   <div className="whitespace-nowrap">
                     <span className="font-semibold text-sm">{formatPrice(product.price)}</span>
                     {product.discount && (
-                      <span className="text-xs text-green-600 mr-1">-{product.discount}%</span>
+                      <span className="text-xs text-success mr-1">-{product.discount}%</span>
                     )}
                   </div>
-                  <span className={`text-xs whitespace-nowrap ${product.stock <= 5 ? 'text-red-500 font-medium' : 'text-warm-gray'}`}>
+                  <span className={`text-xs whitespace-nowrap ${product.stock <= 5 ? 'text-error font-medium' : 'text-warm-gray'}`}>
                     {product.stock}
                   </span>
                 </div>
@@ -192,7 +192,7 @@ export default function AdminProductsPage() {
                   </Link>
                   <button
                     onClick={() => handleDelete(product.id)}
-                    className="p-1.5 md:p-2 text-warm-gray hover:text-red-500 transition-colors"
+                    className="p-1.5 md:p-2 text-warm-gray hover:text-error transition-colors"
                   >
                     <FiTrash2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
                   </button>

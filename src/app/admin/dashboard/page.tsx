@@ -5,6 +5,16 @@ import { getProducts } from '@/lib/products';
 import { getOrders } from '@/lib/orders';
 import { Order } from '@/types';
 import { FiPackage, FiShoppingBag, FiDollarSign, FiAlertTriangle } from 'react-icons/fi';
+import { OrderStatus } from '@/types';
+
+const statusBadgeClass: Record<OrderStatus, string> = {
+  'جديد': 'ora-badge-status-new',
+  'قيد المعالجة': 'ora-badge-status-processing',
+  'تم التأكيد': 'ora-badge-status-confirmed',
+  'تم الشحن': 'ora-badge-status-shipped',
+  'مكتمل': 'ora-badge-status-completed',
+  'ملغى': 'ora-badge-status-cancelled',
+};
 import { formatPrice } from '@/lib/format';
 
 export default function AdminDashboard() {
@@ -36,22 +46,22 @@ export default function AdminDashboard() {
       label: 'إجمالي المنتجات',
       value: activeProducts.length,
       icon: FiPackage,
-      color: 'text-blue-600',
-      bg: 'bg-blue-50',
+      color: 'text-gold',
+      bg: 'bg-gold/10',
     },
     {
       label: 'الطلبات الجديدة',
       value: newOrders.length,
       icon: FiShoppingBag,
-      color: 'text-green-600',
-      bg: 'bg-green-50',
+      color: 'text-warm-gray',
+      bg: 'bg-cream',
     },
     {
       label: 'الطلبات المكتملة',
       value: completedOrders.length,
       icon: FiShoppingBag,
-      color: 'text-purple-600',
-      bg: 'bg-purple-50',
+      color: 'text-gold-dark',
+      bg: 'bg-gold/5',
     },
     {
       label: 'إجمالي المبيعات',
@@ -89,14 +99,14 @@ export default function AdminDashboard() {
       </div>
 
       {lowStock.length > 0 && (
-        <div className="bg-orange-50 border border-orange-200 rounded-xl p-4">
-          <div className="flex items-center gap-2 text-orange-700 mb-2">
+        <div className="bg-warning-bg border border-warning/20 rounded-xl p-4">
+          <div className="flex items-center gap-2 text-warning mb-2">
             <FiAlertTriangle className="w-5 h-5" />
             <span className="font-semibold">منتجات على وشك النفاد</span>
           </div>
           <div className="flex flex-wrap gap-2">
             {lowStock.map((p) => (
-              <span key={p.id} className="bg-white px-3 py-1 rounded-full text-sm text-orange-600 border border-orange-200">
+              <span key={p.id} className="bg-white px-3 py-1 rounded-full text-sm text-warning border border-warning/20">
                 {p.name} - {p.stock} قطع
               </span>
             ))}
@@ -128,17 +138,7 @@ export default function AdminDashboard() {
                       <td className="py-3 px-2">{order.items.length} منتج</td>
                       <td className="py-3 px-2">{formatPrice(order.total)}</td>
                       <td className="py-3 px-2">
-                        <span
-                          className={`ora-badge text-xs ${
-                            order.status === 'جديد'
-                              ? 'bg-blue-100 text-blue-700'
-                              : order.status === 'مكتمل'
-                              ? 'bg-green-100 text-green-700'
-                              : order.status === 'ملغى'
-                              ? 'bg-red-100 text-red-700'
-                              : 'bg-yellow-100 text-yellow-700'
-                          }`}
-                        >
+                        <span className={`ora-badge text-xs ${statusBadgeClass[order.status]}`}>
                           {order.status}
                         </span>
                       </td>
@@ -156,15 +156,7 @@ export default function AdminDashboard() {
                 <div key={order.id} className="border border-cream rounded-lg p-3">
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-bold text-gold text-sm">#{order.id}</span>
-                    <span className={`ora-badge text-xs ${
-                      order.status === 'جديد'
-                        ? 'bg-blue-100 text-blue-700'
-                        : order.status === 'مكتمل'
-                        ? 'bg-green-100 text-green-700'
-                        : order.status === 'ملغى'
-                        ? 'bg-red-100 text-red-700'
-                        : 'bg-yellow-100 text-yellow-700'
-                    }`}>
+                    <span className={`ora-badge text-xs ${statusBadgeClass[order.status]}`}>
                       {order.status}
                     </span>
                   </div>

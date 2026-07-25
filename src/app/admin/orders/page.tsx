@@ -9,12 +9,12 @@ import Select from '@/components/Select';
 
 const statuses: OrderStatus[] = ['جديد', 'قيد المعالجة', 'تم التأكيد', 'تم الشحن', 'مكتمل', 'ملغى'];
 const statusColors: Record<string, string> = {
-  'جديد': 'bg-blue-100 text-blue-700',
-  'قيد المعالجة': 'bg-yellow-100 text-yellow-700',
-  'تم التأكيد': 'bg-purple-100 text-purple-700',
-  'تم الشحن': 'bg-indigo-100 text-indigo-700',
-  'مكتمل': 'bg-green-100 text-green-700',
-  'ملغى': 'bg-red-100 text-red-700',
+  'جديد': 'ora-badge-status-new',
+  'قيد المعالجة': 'ora-badge-status-processing',
+  'تم التأكيد': 'ora-badge-status-confirmed',
+  'تم الشحن': 'ora-badge-status-shipped',
+  'مكتمل': 'ora-badge-status-completed',
+  'ملغى': 'ora-badge-status-cancelled',
 };
 
 export default function AdminOrdersPage() {
@@ -115,7 +115,7 @@ export default function AdminOrdersPage() {
                       <span>{formatPrice(order.subtotal)}</span>
                     </div>
                     {order.discount > 0 && (
-                      <div className="flex justify-between text-green-600">
+                      <div className="flex justify-between text-success">
                         <span>الخصم</span>
                         <span>-{formatPrice(order.discount)}</span>
                       </div>

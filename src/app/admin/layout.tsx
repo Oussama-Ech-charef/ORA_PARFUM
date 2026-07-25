@@ -139,7 +139,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </Link>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-3 text-warm-gray hover:text-red-400 transition-colors text-sm w-full"
+              className="flex items-center gap-3 text-warm-gray hover:text-error transition-colors text-sm w-full"
             >
               <FiLogOut className="w-4 h-4 flex-shrink-0" />
               تسجيل الخروج
