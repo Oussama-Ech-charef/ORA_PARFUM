@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { FiUpload, FiX, FiImage } from 'react-icons/fi';
 
 interface ImageUploadProps {
   value?: string;
-  onChange: (url: string | null) => void;
+  onChange: (file: File | null) => void;
 }
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -13,10 +13,16 @@ const MAX_SIZE = 10 * 1024 * 1024;
 
 export default function ImageUpload({ value, onChange }: ImageUploadProps) {
   const [preview, setPreview] = useState<string | null>(value || null);
-  const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    return () => {
+      if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
 
   const validateFile = (file: File): string | null => {
     if (!ALLOWED_TYPES.includes(file.type)) return 'يُسمح فقط بملفات JPG و PNG و WEBP';
@@ -24,51 +30,24 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
     return null;
   };
 
-  const uploadFile = async (file: File) => {
+  const handleFile = (file: File) => {
     const validationError = validateFile(file);
     if (validationError) {
       setError(validationError);
       return;
     }
     setError(null);
-    setUploading(true);
 
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const res = await fetch('/api/upload', { method: 'POST', body: formData });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'فشل رفع الملف');
-      }
-
-      const data = await res.json();
-
-      if (preview && preview.startsWith('/uploads/')) {
-        const oldFilename = preview.split('/').pop();
-        if (oldFilename) {
-          fetch('/api/upload', {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ filename: oldFilename }),
-          }).catch(() => {});
-        }
-      }
-
-      setPreview(data.url);
-      onChange(data.url);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'فشل رفع الملف');
-    } finally {
-      setUploading(false);
-    }
+    if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview);
+    const blobUrl = URL.createObjectURL(file);
+    setPreview(blobUrl);
+    setSelectedFile(file);
+    onChange(file);
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) uploadFile(file);
+    if (file) handleFile(file);
     if (inputRef.current) inputRef.current.value = '';
   };
 
@@ -76,7 +55,7 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
     e.preventDefault();
     setIsDragging(false);
     const file = e.dataTransfer.files?.[0];
-    if (file) uploadFile(file);
+    if (file) handleFile(file);
   }, [preview]);
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -90,17 +69,9 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
   };
 
   const handleRemove = () => {
-    if (preview && preview.startsWith('/uploads/')) {
-      const filename = preview.split('/').pop();
-      if (filename) {
-        fetch('/api/upload', {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ filename }),
-        }).catch(() => {});
-      }
-    }
-    setPreview(null);
+    if (preview && preview.startsWith('blob:')) URL.revokeObjectURL(preview);
+    setPreview(value || null);
+    setSelectedFile(null);
     onChange(null);
   };
 
@@ -140,15 +111,9 @@ export default function ImageUpload({ value, onChange }: ImageUploadProps) {
         >
           <div className="flex flex-col items-center gap-3">
             <div>
-              {uploading ? (
-                <div className="w-12 h-12 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto" />
-              ) : (
-                <FiUpload className="ora-file-upload-icon" />
-              )}
+              <FiUpload className="ora-file-upload-icon" />
             </div>
-            <p className="ora-file-upload-text">
-              {uploading ? 'جاري الرفع...' : 'اضغط لاختيار صورة'}
-            </p>
+            <p className="ora-file-upload-text">اضغط لاختيار صورة</p>
             <p className="ora-file-upload-hint">أو اسحب وأفلت الصورة هنا</p>
             <p className="ora-file-upload-formats">JPG, PNG, WEBP - حد أقصى 10 MB</p>
           </div>
