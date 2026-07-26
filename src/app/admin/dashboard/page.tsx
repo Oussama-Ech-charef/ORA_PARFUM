@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import { getProducts } from '@/lib/products';
 import { products as seedProducts } from '@/data/products';
 import { getOrders } from '@/lib/orders';
+import { getMessages } from '@/lib/messages';
 import { Order } from '@/types';
-import { FiPackage, FiShoppingBag, FiDollarSign, FiAlertTriangle } from 'react-icons/fi';
+import { FiPackage, FiShoppingBag, FiDollarSign, FiAlertTriangle, FiMessageSquare, FiTrendingUp, FiCalendar } from 'react-icons/fi';
 import { OrderStatus } from '@/types';
 
 const statusBadgeClass: Record<OrderStatus, string> = {
@@ -21,6 +22,11 @@ import { formatPrice } from '@/lib/format';
 function formatDate(dateStr: string): string {
   const [y, m, d] = dateStr.split('T')[0].split('-');
   return `${d}/${m}/${y}`;
+}
+
+function getMonthName(m: number): string {
+  const names = ['يناير', 'فبراير', 'مارس', 'أبريل', 'ماي', 'يونيو', 'يوليوز', 'غشت', 'شتنبر', 'أكتوبر', 'نونبر', 'دجنبر'];
+  return names[m] || '';
 }
 
 export default function AdminDashboard() {
@@ -42,12 +48,48 @@ export default function AdminDashboard() {
     );
   }
 
-
   const activeProducts = allProducts.filter((p) => p.active);
   const newOrders = orders.filter((o) => o.status === 'جديد');
   const completedOrders = orders.filter((o) => o.status === 'مكتمل');
+  const cancelledOrders = orders.filter((o) => o.status === 'ملغى');
   const totalSales = orders.reduce((sum, o) => sum + o.total, 0);
+  const totalRevenue = completedOrders.reduce((sum, o) => sum + o.total, 0);
   const lowStock = allProducts.filter((p) => p.active && p.stock <= 5);
+  const outOfStock = allProducts.filter((p) => p.active && p.stock === 0);
+  const messages = getMessages();
+  const unreadMessages = messages.filter((m) => !m.read).length;
+
+  const today = new Date().toISOString().split('T')[0];
+  const todayOrders = orders.filter((o) => o.createdAt.startsWith(today));
+  const todayRevenue = todayOrders.reduce((sum, o) => sum + o.total, 0);
+
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+  const monthOrders = orders.filter((o) => {
+    const d = new Date(o.createdAt);
+    return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+  });
+  const monthRevenue = monthOrders.reduce((sum, o) => sum + o.total, 0);
+
+  const ordersByMonth: { label: string; count: number; revenue: number }[] = [];
+  const monthsToShow = 6;
+  for (let i = monthsToShow - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setMonth(d.getMonth() - i);
+    const m = d.getMonth();
+    const y = d.getFullYear();
+    const monthOrdersList = orders.filter((o) => {
+      const od = new Date(o.createdAt);
+      return od.getMonth() === m && od.getFullYear() === y;
+    });
+    ordersByMonth.push({
+      label: `${getMonthName(m)}`,
+      count: monthOrdersList.length,
+      revenue: monthOrdersList.reduce((sum, o) => sum + o.total, 0),
+    });
+  }
+
+  const maxOrderCount = Math.max(...ordersByMonth.map((m) => m.count), 1);
 
   const stats = [
     {
@@ -56,6 +98,13 @@ export default function AdminDashboard() {
       icon: FiPackage,
       color: 'text-gold',
       bg: 'bg-gold/10',
+    },
+    {
+      label: 'المنتجات النشطة',
+      value: `${activeProducts.length}/${allProducts.length}`,
+      icon: FiPackage,
+      color: 'text-success',
+      bg: 'bg-success/5',
     },
     {
       label: 'الطلبات الجديدة',
@@ -72,11 +121,32 @@ export default function AdminDashboard() {
       bg: 'bg-gold/5',
     },
     {
-      label: 'إجمالي المبيعات',
-      value: formatPrice(totalSales),
+      label: 'إجمالي الإيرادات',
+      value: formatPrice(totalRevenue),
       icon: FiDollarSign,
       color: 'text-gold',
       bg: 'bg-gold/10',
+    },
+    {
+      label: 'مبيعات اليوم',
+      value: formatPrice(todayRevenue),
+      icon: FiCalendar,
+      color: 'text-warm-gray',
+      bg: 'bg-cream',
+    },
+    {
+      label: 'طلبات هذا الشهر',
+      value: monthOrders.length,
+      icon: FiTrendingUp,
+      color: 'text-gold-dark',
+      bg: 'bg-gold/5',
+    },
+    {
+      label: 'الرسائل غير المقروءة',
+      value: unreadMessages,
+      icon: FiMessageSquare,
+      color: 'text-warm-gray',
+      bg: 'bg-cream',
     },
   ];
 
@@ -117,6 +187,40 @@ export default function AdminDashboard() {
               <span key={p.id} className="bg-white px-3 py-1 rounded-full text-sm text-warning border border-warning/20">
                 {p.name} - {p.stock} قطع
               </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {outOfStock.length > 0 && (
+        <div className="bg-error/5 border border-error/20 rounded-xl p-4">
+          <div className="flex items-center gap-2 text-error mb-2">
+            <FiAlertTriangle className="w-5 h-5" />
+            <span className="font-semibold">منتجات نفدت من المخزون</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {outOfStock.map((p) => (
+              <span key={p.id} className="bg-white px-3 py-1 rounded-full text-sm text-error border border-error/20">
+                {p.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {orders.length > 0 && (
+        <div className="bg-white border border-cream rounded-xl p-4 md:p-6">
+          <h2 className="text-base md:text-lg font-semibold mb-4">حركة الطلبات (آخر 6 أشهر)</h2>
+          <div className="flex items-end gap-2 md:gap-3 h-32 md:h-40">
+            {ordersByMonth.map((m) => (
+              <div key={m.label} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+                <span className="text-[10px] md:text-xs text-warm-gray font-medium">{m.count}</span>
+                <div
+                  className="w-full bg-gold/20 rounded-t-md transition-all hover:bg-gold/40"
+                  style={{ height: `${(m.count / maxOrderCount) * 100}%`, minHeight: m.count > 0 ? '8px' : '0' }}
+                />
+                <span className="text-[10px] md:text-xs text-warm-gray text-center">{m.label}</span>
+              </div>
             ))}
           </div>
         </div>

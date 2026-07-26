@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { FiLayout, FiPackage, FiShoppingBag, FiMessageSquare, FiSettings, FiLogOut, FiMenu, FiX } from 'react-icons/fi';
+import { getUnreadCount } from '@/lib/messages';
 
 const adminLinks = [
   { href: '/admin/dashboard', label: 'الإحصائيات', icon: FiLayout },
@@ -20,6 +21,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    setUnreadCount(getUnreadCount());
+    const interval = setInterval(() => setUnreadCount(getUnreadCount()), 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const closeSidebar = useCallback(() => setSidebarOpen(false), []);
 
@@ -126,8 +134,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     }`}
                   >
                     <Icon className="w-4 h-4 flex-shrink-0" />
-                    {link.label}
-                  </Link>
+                  {link.label}
+                  {link.href === '/admin/messages' && unreadCount > 0 && (
+                    <span className="mr-auto bg-gold text-white text-[10px] rounded-full px-1.5 py-0.5 min-w-[18px] text-center leading-tight">
+                      {unreadCount}
+                    </span>
+                  )}
+                </Link>
                 );
               })}
             </nav>
