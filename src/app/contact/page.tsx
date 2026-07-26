@@ -1,13 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FiPhone, FiMail, FiMapPin, FiClock } from 'react-icons/fi';
 import { FaWhatsapp, FaInstagram, FaFacebook, FaTiktok } from 'react-icons/fa';
-import { SITE_CONFIG, getInquiryWhatsAppUrl } from '@/lib/config';
+import { getSettings } from '@/lib/settings';
 import { defaultSettings } from '@/data/settings';
 
 export default function ContactPage() {
-  const social = defaultSettings;
+  const [settings, setSettings] = useState(defaultSettings);
+  useEffect(() => {
+    setSettings(getSettings());
+  }, []);
+  const social = settings;
+  const inquiryUrl = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent('مرحباً، أود الاستفسار عن منتجات ORA PARFUM')}`;
   const [sent, setSent] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -51,7 +56,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold mb-1">الهاتف</h3>
-                      <p className="text-warm-gray" dir="ltr">{SITE_CONFIG.contactPhone}</p>
+                      <p className="text-warm-gray" dir="ltr">{social.contactPhone}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -60,7 +65,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold mb-1">البريد الإلكتروني</h3>
-                      <p className="text-warm-gray">{SITE_CONFIG.contactEmail}</p>
+                      <p className="text-warm-gray">{social.contactEmail}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -69,7 +74,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold mb-1">العنوان</h3>
-                      <p className="text-warm-gray">الدار البيضاء، المغرب</p>
+                      <p className="text-warm-gray">{social.address}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -78,8 +83,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold mb-1">ساعات العمل</h3>
-                      <p className="text-warm-gray">الإثنين - السبت: 9:00 - 21:00</p>
-                      <p className="text-warm-gray">الأحد: مغلق</p>
+                      <p className="text-warm-gray">{social.workingDays || 'الإثنين - السبت'}: {social.workingHours || '9:00 - 21:00'}</p>
+                      <p className="text-warm-gray">{social.weekendDay || 'الأحد: مغلق'}</p>
                     </div>
                   </div>
                 </div>
@@ -113,7 +118,7 @@ export default function ContactPage() {
                     <FaTiktok className="w-5 h-5" />
                   </a>
                   <a
-                    href={getInquiryWhatsAppUrl()}
+                    href={inquiryUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-12 h-12 rounded-full bg-whatsapp flex items-center justify-center text-white hover:bg-whatsapp-dark transition-all hover:shadow-lg"
@@ -157,7 +162,7 @@ export default function ContactPage() {
                   أو تواصل معنا مباشرة عبر واتساب للحصول على رد أسرع
                 </p>
                 <a
-                  href={getInquiryWhatsAppUrl()}
+                  href={inquiryUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="ora-btn-gold w-full mt-3 flex items-center justify-center gap-2"
