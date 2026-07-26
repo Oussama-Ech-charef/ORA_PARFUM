@@ -2,6 +2,7 @@
 
 import { Product } from '@/types';
 import { products as seedProducts } from '@/data/products';
+import { cleanupImages } from './cleanup';
 
 const STORAGE_KEY = 'ora_products';
 
@@ -43,11 +44,26 @@ export function updateProduct(id: string, updates: Partial<Product>): void {
   const list = getAll();
   const idx = list.findIndex((p) => p.id === id);
   if (idx >= 0) {
+    const oldImage = list[idx].image;
     list[idx] = { ...list[idx], ...updates };
     saveAll(list);
+
+    if (updates.image && oldImage && oldImage !== updates.image && oldImage.startsWith('/uploads/')) {
+      const activeImages = getAll().map((p) => p.image);
+      cleanupImages([oldImage], activeImages);
+    }
   }
 }
 
 export function deleteProduct(id: string): void {
-  saveAll(getAll().filter((p) => p.id !== id));
+  const list = getAll();
+  const product = list.find((p) => p.id === id);
+  const imageToDelete = product?.image || '';
+
+  saveAll(list.filter((p) => p.id !== id));
+
+  if (imageToDelete.startsWith('/uploads/')) {
+    const activeImages = getAll().map((p) => p.image);
+    cleanupImages([imageToDelete], activeImages);
+  }
 }
