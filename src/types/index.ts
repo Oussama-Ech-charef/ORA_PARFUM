@@ -40,6 +40,16 @@ export interface Order {
 
 export type OrderStatus = 'جديد' | 'قيد المعالجة' | 'تم التأكيد' | 'تم الشحن' | 'مكتمل' | 'ملغى';
 
+export interface Message {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  message: string;
+  createdAt: string;
+  read?: boolean;
+}
+
 export interface SiteSettings {
   whatsappNumber: string;
   storeName: string;
@@ -51,4 +61,17 @@ export interface SiteSettings {
   facebook: string;
   tiktok: string;
   deliveryInfo: string;
+  workingDays?: string;
+  workingHours?: string;
+  weekendDay?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  seoKeywords?: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  logo?: string;
+  favicon?: string;
+  currency?: string;
+  language?: string;
+  orderWhatsappMessage?: string;
 }

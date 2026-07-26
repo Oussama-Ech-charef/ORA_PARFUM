@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { defaultSettings } from '@/data/settings';
-import { FiSave } from 'react-icons/fi';
+import { FiSave, FiUpload } from 'react-icons/fi';
 import { SiteSettings } from '@/types';
 
 function getSavedSettings(): SiteSettings {
@@ -101,6 +101,70 @@ export default function AdminSettingsPage() {
           <div>
             <label className="ora-label">معلومات التوصيل</label>
             <textarea name="deliveryInfo" value={form.deliveryInfo} onChange={handleChange} className="ora-textarea" />
+          </div>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-semibold mb-4 pb-2 border-b border-cream">شعار الموقع</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="ora-label">رابط الشعار</label>
+              <input name="logo" value={form.logo || ''} onChange={handleChange} className="ora-input" dir="ltr" placeholder="/logo1.png" />
+            </div>
+            <div>
+              <label className="ora-label">أيقونة الموقع (Favicon)</label>
+              <input name="favicon" value={form.favicon || ''} onChange={handleChange} className="ora-input" dir="ltr" placeholder="/logo1.png" />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-semibold mb-4 pb-2 border-b border-cream">الواجهة الرئيسية (Hero)</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="md:col-span-2">
+              <label className="ora-label">العنوان الرئيسي</label>
+              <input name="heroTitle" value={form.heroTitle || ''} onChange={handleChange} className="ora-input" />
+            </div>
+            <div className="md:col-span-2">
+              <label className="ora-label">النص الفرعي</label>
+              <textarea name="heroSubtitle" value={form.heroSubtitle || ''} onChange={handleChange} className="ora-textarea" />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-semibold mb-4 pb-2 border-b border-cream">ساعات العمل</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="ora-label">أيام العمل</label>
+              <input name="workingDays" value={form.workingDays || ''} onChange={handleChange} className="ora-input" placeholder="الإثنين - السبت" />
+            </div>
+            <div>
+              <label className="ora-label">ساعات العمل</label>
+              <input name="workingHours" value={form.workingHours || ''} onChange={handleChange} className="ora-input" placeholder="9:00 - 21:00" />
+            </div>
+            <div>
+              <label className="ora-label">يوم العطلة</label>
+              <input name="weekendDay" value={form.weekendDay || ''} onChange={handleChange} className="ora-input" placeholder="الأحد: مغلق" />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-semibold mb-4 pb-2 border-b border-cream">تحسين محركات البحث (SEO)</h2>
+          <div className="grid grid-cols-1 gap-4">
+            <div>
+              <label className="ora-label">عنوان SEO</label>
+              <input name="seoTitle" value={form.seoTitle || ''} onChange={handleChange} className="ora-input" />
+            </div>
+            <div>
+              <label className="ora-label">وصف SEO</label>
+              <textarea name="seoDescription" value={form.seoDescription || ''} onChange={handleChange} className="ora-textarea" />
+            </div>
+            <div>
+              <label className="ora-label">كلمات مفتاحية</label>
+              <textarea name="seoKeywords" value={form.seoKeywords || ''} onChange={handleChange} className="ora-textarea" />
+            </div>
           </div>
         </div>
 
