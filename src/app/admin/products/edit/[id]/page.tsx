@@ -26,6 +26,7 @@ export default function EditProductPage() {
     gender: product?.gender || '',
     image: product?.image || '',
   });
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -43,8 +44,31 @@ export default function EditProductPage() {
     );
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    let imageUrl = form.image;
+
+    if (selectedImageFile) {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', selectedImageFile);
+
+      try {
+        const res = await fetch('/api/upload', { method: 'POST', body: uploadFormData });
+
+        if (!res.ok) {
+          const errData = await res.json();
+          alert(errData.error || 'فشل رفع الصورة');
+          return;
+        }
+
+        const data = await res.json();
+        imageUrl = data.url;
+      } catch {
+        alert('فشل رفع الصورة');
+        return;
+      }
+    }
+
     updateProduct(product.id, {
       name: form.name,
       slug: form.slug,
@@ -56,8 +80,9 @@ export default function EditProductPage() {
       notes: form.notes,
       category: form.category,
       gender: form.gender,
-      image: form.image || product.image,
+      image: imageUrl || product.image,
     });
+
     alert('تم تحديث المنتج بنجاح');
     router.push('/admin/products');
   };
@@ -142,7 +167,7 @@ export default function EditProductPage() {
         <div>
           <ImageUpload
             value={form.image || undefined}
-            onChange={(url) => setForm((prev) => ({ ...prev, image: url || '' }))}
+            onChange={(file) => setSelectedImageFile(file)}
           />
         </div>
 

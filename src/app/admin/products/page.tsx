@@ -4,16 +4,30 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getProducts, deleteProduct, updateProduct } from '@/lib/products';
-import { FiPlus, FiEdit2, FiTrash2, FiSearch } from 'react-icons/fi';
+import { getCategories, addCategory, deleteCategory, getGenders, addGender, deleteGender } from '@/lib/categories';
+import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiChevronDown } from 'react-icons/fi';
 import { formatPrice } from '@/lib/format';
 
 export default function AdminProductsPage() {
   const [productsList, setProductsList] = useState(getProducts());
   const [search, setSearch] = useState('');
+  const [categories, setCategories] = useState(getCategories());
+  const [genders, setGenders] = useState(getGenders());
+  const [showCatManager, setShowCatManager] = useState(false);
+  const [newCategory, setNewCategory] = useState('');
+  const [newGender, setNewGender] = useState('');
 
   useEffect(() => {
     setProductsList(getProducts());
+    setCategories(getCategories());
+    setGenders(getGenders());
   }, []);
+
+  const refresh = () => {
+    setProductsList(getProducts());
+    setCategories(getCategories());
+    setGenders(getGenders());
+  };
 
   const filtered = productsList.filter(
     (p) => p.name.includes(search) || p.category.includes(search)
@@ -34,21 +48,130 @@ export default function AdminProductsPage() {
     }
   };
 
+  const handleAddCategory = () => {
+    const name = newCategory.trim();
+    if (name && !categories.includes(name)) {
+      addCategory(name);
+      setNewCategory('');
+      refresh();
+    }
+  };
+
+  const handleDeleteCategory = (name: string) => {
+    if (name === 'الكل') return;
+    const usedCount = productsList.filter((p) => p.category === name).length;
+    if (usedCount > 0 && !confirm(`هناك ${usedCount} منتج في هذا التصنيف. هل أنت متأكد من الحذف؟`)) return;
+    deleteCategory(name);
+    refresh();
+  };
+
+  const handleAddGender = () => {
+    const name = newGender.trim();
+    if (name && !genders.includes(name)) {
+      addGender(name);
+      setNewGender('');
+      refresh();
+    }
+  };
+
+  const handleDeleteGender = (name: string) => {
+    if (name === 'الكل') return;
+    const usedCount = productsList.filter((p) => p.gender === name).length;
+    if (usedCount > 0 && !confirm(`هناك ${usedCount} منتج بهذا النوع. هل أنت متأكد من الحذف؟`)) return;
+    deleteGender(name);
+    refresh();
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-      <div>
-        <h1 className="text-xl md:text-2xl font-bold text-rich-black">إدارة المنتجات</h1>
-        <p className="text-warm-gray text-xs md:text-sm">إضافة وتعديل وحذف المنتجات</p>
+        <div>
+          <h1 className="text-xl md:text-2xl font-bold text-rich-black">إدارة المنتجات</h1>
+          <p className="text-warm-gray text-xs md:text-sm">إضافة وتعديل وحذف المنتجات</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowCatManager(!showCatManager)}
+            className="ora-btn-secondary ora-btn-sm flex items-center justify-center gap-2"
+          >
+            <FiChevronDown className={`w-4 h-4 transition-transform ${showCatManager ? 'rotate-180' : ''}`} />
+            إدارة التصنيفات
+          </button>
+          <Link
+            href="/admin/products/new"
+            className="ora-btn-primary ora-btn-sm flex items-center justify-center gap-2 self-start sm:self-auto"
+          >
+            <FiPlus className="w-4 h-4" />
+            إضافة منتج
+          </Link>
+        </div>
       </div>
-        <Link
-          href="/admin/products/new"
-          className="ora-btn-primary ora-btn-sm flex items-center justify-center gap-2 self-start sm:self-auto"
-        >
-          <FiPlus className="w-4 h-4" />
-          إضافة منتج
-        </Link>
-      </div>
+
+      {showCatManager && (
+        <div className="bg-white border border-cream rounded-xl p-4 md:p-6 space-y-6">
+          <div>
+            <h3 className="text-sm font-semibold text-rich-black mb-3">التصنيفات</h3>
+            <div className="flex flex-wrap gap-2 mb-3">
+              {categories.filter((c) => c !== 'الكل').map((cat) => (
+                <div key={cat} className="flex items-center gap-1.5 bg-ivory rounded-lg px-3 py-1.5 text-sm">
+                  <span>{cat}</span>
+                  <button
+                    onClick={() => handleDeleteCategory(cat)}
+                    className="text-warm-gray hover:text-error transition-colors"
+                  >
+                    <FiTrash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="اسم التصنيف الجديد"
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleAddCategory()}
+                className="ora-input flex-1"
+              />
+              <button onClick={handleAddCategory} className="ora-btn-primary ora-btn-sm flex items-center gap-1">
+                <FiPlus className="w-4 h-4" />
+                إضافة
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold text-rich-black mb-3">الأنواع</h3>
+            <div className="flex flex-wrap gap-2 mb-3">
+              {genders.filter((g) => g !== 'الكل').map((gen) => (
+                <div key={gen} className="flex items-center gap-1.5 bg-ivory rounded-lg px-3 py-1.5 text-sm">
+                  <span>{gen}</span>
+                  <button
+                    onClick={() => handleDeleteGender(gen)}
+                    className="text-warm-gray hover:text-error transition-colors"
+                  >
+                    <FiTrash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="نوع جديد"
+                value={newGender}
+                onChange={(e) => setNewGender(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleAddGender()}
+                className="ora-input flex-1"
+              />
+              <button onClick={handleAddGender} className="ora-btn-primary ora-btn-sm flex items-center gap-1">
+                <FiPlus className="w-4 h-4" />
+                إضافة
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="relative">
         <FiSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-warm-gray w-5 h-5" />

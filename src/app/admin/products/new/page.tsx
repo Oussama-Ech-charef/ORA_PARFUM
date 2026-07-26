@@ -23,14 +23,38 @@ export default function NewProductPage() {
     gender: '',
     image: '',
   });
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    let imageUrl = form.image;
+
+    if (selectedImageFile) {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', selectedImageFile);
+
+      try {
+        const res = await fetch('/api/upload', { method: 'POST', body: uploadFormData });
+
+        if (!res.ok) {
+          const errData = await res.json();
+          alert(errData.error || 'فشل رفع الصورة');
+          return;
+        }
+
+        const data = await res.json();
+        imageUrl = data.url;
+      } catch {
+        alert('فشل رفع الصورة');
+        return;
+      }
+    }
+
     addProduct({
       id: Date.now().toString(),
       name: form.name,
@@ -43,10 +67,11 @@ export default function NewProductPage() {
       notes: form.notes,
       category: form.category,
       gender: form.gender,
-      image: form.image || '/images/products/ora-black.jpg',
+      image: imageUrl || '/images/products/ora-black.jpg',
       active: true,
       createdAt: new Date().toISOString().split('T')[0],
     });
+
     alert('تم إضافة المنتج بنجاح');
     router.push('/admin/products');
   };
@@ -131,7 +156,7 @@ export default function NewProductPage() {
         <div>
           <ImageUpload
             value={form.image || undefined}
-            onChange={(url) => setForm((prev) => ({ ...prev, image: url || '' }))}
+            onChange={(file) => setSelectedImageFile(file)}
           />
         </div>
 
