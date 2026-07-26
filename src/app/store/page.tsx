@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { getProducts } from '@/lib/products';
-import { products as seedProducts, categories, genders } from '@/data/products';
+import { products as seedProducts } from '@/data/products';
+import { getCategories, getGenders } from '@/lib/categories';
 import ProductCard from '@/components/ProductCard';
 import { FiSearch, FiSliders, FiChevronDown, FiX } from 'react-icons/fi';
 
@@ -22,7 +23,14 @@ export default function StorePage() {
   const [showDiscountOnly, setShowDiscountOnly] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
+  const [categories, setCategories] = useState(getCategories());
+  const [genders, setGenders] = useState(getGenders());
   const sortRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setCategories(getCategories());
+    setGenders(getGenders());
+  }, []);
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {

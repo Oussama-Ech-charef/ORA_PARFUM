@@ -8,10 +8,17 @@ import { products as seedProducts } from '@/data/products';
 import ProductCard from '@/components/ProductCard';
 import { FiChevronDown, FiStar, FiShield, FiTruck, FiArrowLeft } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
-import { getInquiryWhatsAppUrl } from '@/lib/config';
+import { getSettings } from '@/lib/settings';
+import { defaultSettings } from '@/data/settings';
 
 export default function Home() {
   const [heroLoaded, setHeroLoaded] = useState(false);
+  const [settings, setSettings] = useState(defaultSettings);
+  useEffect(() => {
+    setSettings(getSettings());
+  }, []);
+
+  const inquiryUrl = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent('مرحباً، أود الاستفسار عن منتجات ORA PARFUM')}`;
 
   const [allProducts, setAllProducts] = useState([...seedProducts]);
   useEffect(() => {
@@ -47,10 +54,10 @@ export default function Home() {
             </div>
             <div className="w-24 h-0.5 bg-gold mx-auto mb-8" />
             <h1 className="text-4xl md:text-7xl font-bold text-white mb-4 tracking-wide">
-              ORA PARFUM
+              {settings.heroTitle || 'ORA PARFUM'}
             </h1>
             <p className="text-lg md:text-xl text-warm-gray mb-10 max-w-2xl mx-auto">
-              عطور فاخرة تجمع بين أصالة الشرق وحداثة الغرب. كل عطر يحكي قصة من الفخامة والأناقة.
+              {settings.heroSubtitle || 'عطور فاخرة تجمع بين أصالة الشرق وحداثة الغرب. كل عطر يحكي قصة من الفخامة والأناقة.'}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
@@ -61,7 +68,7 @@ export default function Home() {
                 <FiArrowLeft className="w-5 h-5" />
               </Link>
               <a
-                href={getInquiryWhatsAppUrl()}
+                href={inquiryUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="ora-btn-gold text-lg px-10 py-4"
@@ -204,7 +211,7 @@ export default function Home() {
             هل لديك استفسار؟ نحن هنا لمساعدتك
           </p>
           <a
-            href={getInquiryWhatsAppUrl()}
+            href={inquiryUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="ora-btn-gold text-lg px-10 py-4 inline-flex items-center gap-3"

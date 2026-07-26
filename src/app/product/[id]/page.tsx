@@ -10,7 +10,7 @@ import { useCart } from '@/context/CartContext';
 import ProductCard from '@/components/ProductCard';
 import { FiShoppingCart, FiMinus, FiPlus, FiCheck } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
-import { SITE_CONFIG } from '@/lib/config';
+import { getWhatsappNumber } from '@/lib/config';
 import { formatPrice } from '@/lib/format';
 import { generateOrderId } from '@/lib/orders';
 
@@ -71,7 +71,7 @@ export default function ProductPage() {
     lines.push('');
     lines.push('شكراً لكم.');
 
-    const url = `https://wa.me/${SITE_CONFIG.whatsappNumber}?text=${encodeURIComponent(lines.join('\n'))}`;
+    const url = `https://wa.me/${getWhatsappNumber()}?text=${encodeURIComponent(lines.join('\n'))}`;
     window.open(url, '_blank');
     setOrderSent(true);
     setTimeout(() => setOrderSent(false), 3000);

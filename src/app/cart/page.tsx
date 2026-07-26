@@ -7,7 +7,7 @@ import { useCart } from '@/context/CartContext';
 import { FiMinus, FiPlus, FiTrash2, FiShoppingBag, FiArrowRight, FiAlertCircle } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import { formatPrice } from '@/lib/format';
-import { SITE_CONFIG } from '@/lib/config';
+import { getWhatsappNumber } from '@/lib/config';
 import { generateOrderMessageForItems, computeItemsTotals } from '@/lib/cart';
 
 export default function CartPage() {
@@ -50,7 +50,7 @@ export default function CartPage() {
     setValidationError('');
 
     const orderId = `#ORA-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
-    const url = generateOrderMessageForItems(filteredItems, orderId, SITE_CONFIG.whatsappNumber);
+    const url = generateOrderMessageForItems(filteredItems, orderId, getWhatsappNumber());
     window.open(url, '_blank');
     setOrderPlaced(true);
     setTimeout(() => setOrderPlaced(false), 3000);
