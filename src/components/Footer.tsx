@@ -6,20 +6,22 @@ import Image from 'next/image';
 import { FiInstagram, FiFacebook, FiPhone, FiMail, FiMapPin } from 'react-icons/fi';
 import { FaTiktok } from 'react-icons/fa';
 import { usePathname } from 'next/navigation';
-import { SITE_CONFIG } from '@/lib/config';
+import { getSettings } from '@/lib/settings';
 import { defaultSettings } from '@/data/settings';
 
 export default function Footer() {
   const [year, setYear] = useState(2025);
+  const [settings, setSettings] = useState(defaultSettings);
   useEffect(() => {
     setYear(new Date().getFullYear());
+    setSettings(getSettings());
   }, []);
 
   const pathname = usePathname();
   const isAdmin = pathname.startsWith('/admin');
   if (isAdmin) return null;
 
-  const social = defaultSettings;
+  const social = settings;
 
   return (
     <footer className="bg-black text-white">
@@ -28,12 +30,12 @@ export default function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="relative w-[120px] h-[38px] md:w-[140px] md:h-[44px]">
-                <Image
-                  src="/logo1.png"
-                  alt="ORA PARFUM"
-                  fill
-                  className="object-contain object-right brightness-0 invert"
-                />
+                  <Image
+                    src={social.logo || '/logo1.png'}
+                    alt="ORA PARFUM"
+                    fill
+                    className="object-contain object-right brightness-0 invert"
+                  />
               </div>
             </div>
             <p className="text-white/60 text-sm leading-relaxed">

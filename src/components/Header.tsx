@@ -6,10 +6,13 @@ import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
 import { FiShoppingCart, FiMenu, FiX, FiUser } from 'react-icons/fi';
 import { usePathname } from 'next/navigation';
+import { getSettings } from '@/lib/settings';
+import { defaultSettings } from '@/data/settings';
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [settings, setSettings] = useState(defaultSettings);
   const { itemCount, openCartDrawer } = useCart();
   const pathname = usePathname();
 
@@ -19,6 +22,10 @@ export default function Header() {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setSettings(getSettings());
   }, []);
 
   useEffect(() => {
@@ -50,7 +57,7 @@ export default function Header() {
           <Link href="/" className="block">
             <div className="relative w-[140px] h-[44px] md:w-[185px] md:h-[56px]">
               <Image
-                src="/logo1.png"
+                src={settings.logo || '/logo1.png'}
                 alt="ORA PARFUM"
                 fill
                 className="object-contain object-right"
